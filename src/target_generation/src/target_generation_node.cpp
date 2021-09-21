@@ -52,7 +52,7 @@ void TargetNode::mainLoop()
 	double delta_y = actor_pose.pose.position.y - odom_in_map_frame.pose.position.y;
 	double delta_r = sqrt(pow(delta_x, 2.0) + pow(delta_y, 2.0));
 	// Distance that is substrated from the position of the actor
-	double distance_to_follow_behind = 1.5;
+	double distance_to_follow_behind = 1.0;
 
 	target.pose.position.x = actor_pose.pose.position.x -
 							 distance_to_follow_behind * delta_x / delta_r;
