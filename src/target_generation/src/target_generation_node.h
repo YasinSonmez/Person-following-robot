@@ -6,9 +6,14 @@
 #include <tf/tf.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <tf2_ros/transform_listener.h>
+#include "ros/topic.h"
+#include <std_msgs/String.h>
 using namespace std;
 
 #define PI 3.14159265
+#define FOLLOW_MODE "check costmap behind the human"
+// #define FOLLOW_MODE "between the robot and human"
+// #define FOLLOW_MODE "behind the human"
 
 class TargetNode
 {
@@ -37,9 +42,7 @@ private:
   geometry_msgs::PoseStamped odom_in_map_frame;
   geometry_msgs::TransformStamped odom_to_map;
   tf2_ros::Buffer tf_buffer;
-  //string follow_mode = "between the robot and human";
-  string follow_mode = "behind the human";
-  //string follow_mode = "check costmap behind the human";
+  bool actor_message_arrived = false;
 
   ros::Time begin;
 

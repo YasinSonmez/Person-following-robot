@@ -16,20 +16,20 @@ TebLocalPlannerROS:
   publish_feedback: False
 
   # Robot
-  max_vel_x: 2.0 # m/s
-  max_vel_x_backwards: 1.0 # m/s
+  max_vel_x: 0.55 # m/s
+  max_vel_x_backwards: 0.2 # m/s
   max_vel_y: 0.0
-  max_vel_theta: 2.0 # rad/s
-  acc_lim_x: 1.0 # m/s^2
-  acc_lim_theta: 2.0 # rad/s^2
+  max_vel_theta: 1.0 # rad/s
+  acc_lim_x: 0.3 # m/s^2
+  acc_lim_theta: 0.5 # rad/s^2
   min_turning_radius: 0.0 # diff-drive robot (can turn on place!)
 
   footprint_model:
     type: "point"
 
   # GoalTolerance
-  xy_goal_tolerance: 0.2
-  yaw_goal_tolerance: 0.1
+  xy_goal_tolerance: 0.3
+  yaw_goal_tolerance: 0.4
   free_goal_vel: False
   complete_global_plan: True
 
@@ -59,10 +59,10 @@ TebLocalPlannerROS:
   weight_acc_lim_x: 1
   weight_acc_lim_theta: 1
   weight_kinematics_nh: 1000
-  weight_kinematics_forward_drive: 1
+  weight_kinematics_forward_drive: 10
   weight_kinematics_turning_radius: 1
   weight_optimaltime: 1 # must be > 0
-  weight_shortest_path: 0
+  weight_shortest_path: 1
   weight_obstacle: 50
   weight_inflation: 0.2
   weight_dynamic_obstacle: 10
