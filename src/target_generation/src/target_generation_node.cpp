@@ -60,7 +60,25 @@ void TargetNode::costmapCallback(const nav_msgs::OccupancyGrid::ConstPtr &costma
 void TargetNode::modelStatesCallback(const gazebo_msgs::ModelStates::ConstPtr &model_states)
 {
 	int actor1_index = getIndex(model_states->name, "actor1");
-	actor_pose.pose = model_states->pose[actor1_index];
+
+	// Set the yaw angle from substracting consequent positions
+	yaw = std::atan2((model_states->pose[actor1_index].position.y - actor_pose.pose.position.y),
+					 (model_states->pose[actor1_index].position.x - actor_pose.pose.position.x));
+
+	// translate yaw into a Quaternion
+	tf::Quaternion q;
+	q.setRPY(0.0, 0.0, yaw);
+
+	// Convert quaternion to msg
+	geometry_msgs::Quaternion q_msg;
+	tf::quaternionTFToMsg(q, q_msg);
+
+	// Set the orientation quaternion
+	actor_pose.pose.orientation = q_msg;
+
+	// Set the position
+	actor_pose.pose.position = model_states->pose[actor1_index].position;
+
 	actor_pose.header.stamp = ros::Time::now();
 	actor_pose.header.frame_id = "map";
 	followed_person_pub.publish(actor_pose);
@@ -74,18 +92,7 @@ void TargetNode::mainLoop()
 	// Check if the target position message is arrived
 	if (actor_message_arrived)
 	{
-		// Get orientation from quaternion
-		tf::Quaternion q(
-			actor_pose.pose.orientation.x,
-			actor_pose.pose.orientation.y,
-			actor_pose.pose.orientation.z,
-			actor_pose.pose.orientation.w);
-		tf::Matrix3x3 m(q);
-		double roll, pitch, yaw;
-		m.getRPY(roll, pitch, yaw);
-		// Substract PI/2.0 for convenience in the simulator
-		yaw = yaw - PI / 2.0;
-		target.pose.orientation = tf::createQuaternionMsgFromYaw(yaw);
+		target.pose.orientation = actor_pose.pose.orientation;
 
 		// Distance that is substracted from the position of the actor
 		double distance_to_follow_behind = 1.5;

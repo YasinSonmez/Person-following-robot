@@ -6,8 +6,10 @@
 #include <tf/tf.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <tf2_ros/transform_listener.h>
+#include <tf/transform_datatypes.h> // tf to geometry_msgs conversion
 #include "ros/topic.h"
 #include <std_msgs/String.h>
+#include <math.h> // atan
 using namespace std;
 
 #define PI 3.14159265
@@ -43,6 +45,7 @@ private:
   geometry_msgs::TransformStamped odom_to_map;
   tf2_ros::Buffer tf_buffer;
   bool actor_message_arrived = false;
+  double yaw = 0.0; // yaw angle of the followed human
 
   ros::Time begin;
 
