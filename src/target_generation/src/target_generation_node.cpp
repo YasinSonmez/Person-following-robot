@@ -94,28 +94,25 @@ void TargetNode::mainLoop()
 	{
 		target.pose.orientation = actor_pose.pose.orientation;
 
-		// Distance that is substracted from the position of the actor
-		double distance_to_follow_behind = 1.5;
-
 		if (FOLLOW_MODE == "between the robot and human")
 		{
-			// Stay some distance behind the human and between the robot and human
+			// Stay some distance behind the human and also between the robot and human
 			double delta_x = actor_pose.pose.position.x - odom_in_map_frame.pose.position.x;
 			double delta_y = actor_pose.pose.position.y - odom_in_map_frame.pose.position.y;
 			double delta_r = sqrt(pow(delta_x, 2.0) + pow(delta_y, 2.0));
 
 			target.pose.position.x = actor_pose.pose.position.x -
-									 distance_to_follow_behind * delta_x / delta_r;
+									 DISTANCE_TO_FOLLOW_BEHIND * delta_x / delta_r;
 			target.pose.position.y = actor_pose.pose.position.y -
-									 distance_to_follow_behind * delta_y / delta_r;
+									 DISTANCE_TO_FOLLOW_BEHIND * delta_y / delta_r;
 		}
 		else if (FOLLOW_MODE == "behind the human")
 		{
 			// Stay exactly behind the human by substracting in the direction where he looks
 			target.pose.position.x = actor_pose.pose.position.x -
-									 distance_to_follow_behind * cos(yaw);
+									 DISTANCE_TO_FOLLOW_BEHIND * cos(yaw);
 			target.pose.position.y = actor_pose.pose.position.y -
-									 distance_to_follow_behind * sin(yaw);
+									 DISTANCE_TO_FOLLOW_BEHIND * sin(yaw);
 		}
 		else if (FOLLOW_MODE == "check costmap behind the human")
 		{
@@ -129,9 +126,9 @@ void TargetNode::mainLoop()
 				delta_yaw = PI / 180.0 * i;
 				// Check plus delta_yaw
 				target.pose.position.x = actor_pose.pose.position.x -
-										 distance_to_follow_behind * cos(yaw + delta_yaw);
+										 DISTANCE_TO_FOLLOW_BEHIND * cos(yaw + delta_yaw);
 				target.pose.position.y = actor_pose.pose.position.y -
-										 distance_to_follow_behind * sin(yaw + delta_yaw);
+										 DISTANCE_TO_FOLLOW_BEHIND * sin(yaw + delta_yaw);
 
 				costmap_idx = mapToCostmapIdx(target.pose.position.x,
 											  target.pose.position.y,
@@ -143,9 +140,9 @@ void TargetNode::mainLoop()
 
 				// Check minus delta_yaw
 				target.pose.position.x = actor_pose.pose.position.x -
-										 distance_to_follow_behind * cos(yaw - delta_yaw);
+										 DISTANCE_TO_FOLLOW_BEHIND * cos(yaw - delta_yaw);
 				target.pose.position.y = actor_pose.pose.position.y -
-										 distance_to_follow_behind * sin(yaw - delta_yaw);
+										 DISTANCE_TO_FOLLOW_BEHIND * sin(yaw - delta_yaw);
 
 				costmap_idx = mapToCostmapIdx(target.pose.position.x,
 											  target.pose.position.y,
