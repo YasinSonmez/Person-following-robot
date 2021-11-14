@@ -1,6 +1,9 @@
 # Person Following, Dynamic Obstacle Avoiding Autonomous Robot
 The goal of this project is to develop a robot that is able to follow a human by avoiding static anddynamic obstacles by generating socially aware trajectories that don’t interfere with the paths ofdynamic objects in the scene.  The robot possesses computers and various sensors such as camerasand laser range sensors onboard so that it can calculate everything on the go.  The aim of the robotis to help humans in various scenarios by following them and aiding them.
 
+
+https://user-images.githubusercontent.com/37510173/141680562-153b4f49-9b82-4cec-bbff-87429644d637.mp4
+
 ## 1. Quick Start
 
 The project has been tested on Ubuntu 16.04 (ROS Kinetic) and 18.04 (ROS Melodic). We highly recommend using Ubuntu 18.04 since Ubuntu 16.04 will no longer be supported after April 2021. In the following we will take ROS Melodic version as the example. The navigation simulation is performed by the powerful ROS navigation stack, wherein two local planners of DWA and TEB are tested. Therefore, please install these packages first:
