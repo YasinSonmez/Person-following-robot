@@ -104,19 +104,19 @@ void gazebo::MapActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf
   this->rosSub = this->rosNode->subscribe(so);
 
   // Costmap conversion
-  ROS_INFO("11111111111111111111111111111");
+  ROS_INFO("Entry9");
   // tf2_ros::Buffer buffer(ros::Duration(10));
   // tf2_ros::TransformListener tf(buffer);
-  tf2_ros::Buffer buffer;
-  // buffer.cache_time = ros::Duration(10);
 
-  costmap_2d::Costmap2DROS lcr("costmap", buffer);
-  ROS_INFO("22222222222222222222222222222");
+  tf_buffer_.reset(new tf2_ros::Buffer());
+  ROS_INFO("Entry10");
+  tf_listener_.reset(new tf2_ros::TransformListener(*tf_buffer_));
+  ROS_INFO("Entry11");
+  costmap_2d::Costmap2DROS lcr("costmap", *tf_buffer_);
+  ROS_INFO("Entry12");
   // global_planner::PlannerWithCostmap pppp("planner", &lcr);
+  ROS_INFO("Entry13");
   //  std::cout << pppp.costmap_->data[0] << std::endl;
-
-  // Call global planner class
-  // my_planner.initialize(this->actor->GetName() + "_global_plan", this->map, "/map");
 
   // Spin up the queue helper thread.
   this->rosQueueThread =

@@ -161,6 +161,11 @@ namespace gazebo
     /// \brief ROS helper function that processes messages
   private:
     void QueueThread();
+
+  public:
+    boost::shared_ptr<tf2_ros::Buffer> tf_buffer_;
+    boost::shared_ptr<tf2_ros::TransformListener> tf_listener_;
   };
-}
+};
+
 #endif
