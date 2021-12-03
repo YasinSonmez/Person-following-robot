@@ -37,7 +37,7 @@ $ roslaunch move_base_benchmark simple_navigation_goals.launch
 You can also select goals for the robot using the ```2D Nav Goal``` tool in ```RViz```.
 
 ## 2. Setup
-
+### 2.1 Actor Collisions Plugin
 We use [**Actor Collisions Plugin**](https://github.com/osrf/gazebo/tree/gazebo11/examples/plugins/actor_collisions) to give dynamic pedestrians collision properties, so that they can be swept by the laser rangefinder. From the actor_collisions directory
 ```
 $ mkdir build
@@ -46,7 +46,14 @@ $ cmake ../
 $ make
 ```
 After that, a library named "libActorCollisionsPlugin.so" will be generated in the build directory. Please update the reference path of "libActorCollisionsPlugin.so" in the xxx_dynamic.world files in the gazebo_world/world directory before you use the dynamic world models. For example, open office02_dynamic.world and use "ctrl+F" to find "libActorCollisionsPlugin.so". Then, replace the value of "filename" with the absolute path of "libActorCollisionsPlugin.so" in your build directory of actor_collisions. Each animated actor needs to call this plugin. Therefore, please check all the reference paths of this plugin in the dynamic world models.
-
+### 2.1 Actor Move Plugin
+Please do the same steps for the actor move directory where the plugin that we have created to move the actors are stored. From the actor_move directory
+```
+$ mkdir build
+$ cd build
+$ cmake ../
+$ make
+```
 ## 3. Using Target Generation Node
 2. Run roscore:
 ```
