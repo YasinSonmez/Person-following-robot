@@ -21,10 +21,10 @@
   <!-- Filename -->
   <arg name="log_filename" default="$(find move_base_benchmark)/launch/log.txt" />
   <arg name="map_filename" default="$(find move_base_benchmark)/maps/small_house/map.yaml" />
-  <arg name="world_filename" default="$(find gazebo_world)/world/small_house.world" />
+  <arg name="world_filename" default="$(find gazebo_world)/world/small_house_map.world" />
   <arg name="global_frame" value="map" />
 
-  <!--  ************** Navigation *************** 
+  <!--  ************** Navigation *************** -->
   <node pkg="move_base_benchmark" type="move_base_benchmark" respawn="false" name="move_base_benchmark" output="screen">
     <rosparam file="$(find move_base_benchmark)/params/costmap_common_params.yaml" command="load" ns="global_costmap" />
     <rosparam file="$(find move_base_benchmark)/params/costmap_common_params.yaml" command="load" ns="local_costmap" />
@@ -45,17 +45,16 @@
     <param name="log_filename" value="$(arg log_filename)" />
     <remap from="cmd_vel" to="RosAria/cmd_vel"/>
     <remap from="odom" to="RosAria/odom"/>
-  </node> -->
-
+  </node> 
   <!--  ****** Maps *****  -->
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_filename)" output="screen">
     <param name="frame_id" value="$(arg global_frame)"/>
   </node>
 
-  <!--  ****** Localization *****  
+  <!--  ****** Localization *****  -->
   <node name="fake_localization" pkg="fake_localization" type="fake_localization" respawn="false" >
     <param name="global_frame_id" value="$(arg global_frame)" />
-  </node>-->
+  </node>
 
   <!--  ****** Start Gazebo and launch world model *****  -->
   <include file="$(find gazebo_world)/launch/world_launch.launch">

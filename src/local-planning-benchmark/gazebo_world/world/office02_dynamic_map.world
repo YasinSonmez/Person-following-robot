@@ -11982,10 +11982,6 @@
       </camera>
     </gui>
 
-    <!-- Usage: modify the <pose> elements of each actor to change their
-         starting location. Modify the <target> elements of each actor to
-         change their destination. The <target_weight> can be used to
-         tune the vector field used by the ActorPlugin to control the Actor. -->
     <actor name="actor1">
       <pose>0 1 1.25 0 0 0</pose>
       <skin>
@@ -12000,14 +11996,7 @@
 
       <plugin name="actor1_plugin" filename="libMapActorPlugin.so">
         <target>0 -5 1.2138</target>
-        <target_weight>1.15</target_weight>
-        <obstacle_weight>1.8</obstacle_weight>
         <animation_factor>5.1</animation_factor>
-        <!-- Usage: Modify the set of models that the vector field should
-             ignore when moving the actor -->
-        <ignore_obstacles>
-          <model>FloorB_01_001</model>
-        </ignore_obstacles>
       </plugin>
     </actor>
 
@@ -12022,14 +12011,10 @@
         <scale>1.000000</scale>
         <interpolate_x>true</interpolate_x>
       </animation>
+
       <plugin name="actor2_plugin" filename="libMapActorPlugin.so">
-        <target>3 2 1.24</target>
-        <target_weight>1.15</target_weight>
-        <obstacle_weight>1.8</obstacle_weight>
+        <target>0 5 1.2138</target>
         <animation_factor>5.1</animation_factor>
-        <ignore_obstacles>
-          <model>FloorB_01_001</model>
-        </ignore_obstacles>
       </plugin>
     </actor>
   </world>

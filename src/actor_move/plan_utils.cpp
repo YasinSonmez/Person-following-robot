@@ -44,7 +44,108 @@ using cm::Costmap2DROS;
 using rm::PoseStamped;
 using std::string;
 using std::vector;
+/*
+using namespace std;
 
+Position a_star(Position init, Position goal, nav_msgs::OccupancyGrid costmapMsg, int window_size = 0, double theta = 0)
+{
+    int delta[4][2] = {-1, 0, 0, -1, 1, 0, 0, 1};
+    double resolution = costmapMsg.info.resolution;
+    int height = costmapMsg.info.height;
+    int width = costmapMsg.info.width;
+
+    double originX = costmapMsg.info.origin.position.x;
+    double originY = costmapMsg.info.origin.position.y;
+
+    double topLimit = theta + PI / 2.0;
+    double bottomLimit = theta - PI / 2.0;
+    bool inverse = true;
+    if (theta < -PI / 2.0)
+    {
+        topLimit = theta + 3 * PI / 2.0;
+        bottomLimit = theta + PI / 2.0;
+        inverse = false;
+    }
+    else if (theta > PI / 2.0)
+    {
+        topLimit = theta - PI / 2.0;
+        bottomLimit = theta - 3 * PI / 2.0;
+        inverse = false;
+    }
+
+    vector<vector<int>> costmap(height, vector<int>(width, 0));
+    vector<vector<int>> heuristic(height, vector<int>(width, 0));
+
+    for (int i = 0; i < height; i++)
+        for (int j = 0; j < width; j++)
+        {
+            int currentData = costmapMsg.data[i * width + (width - 1 - j)];
+            costmap[i][j] = currentData;
+            heuristic[i][j] = abs(i - (int)goal.x) + abs(j - (int)goal.y);
+        }
+
+    vector<vector<int>> closed(height, vector<int>(width, 0));
+    vector<vector<int>> action(height, vector<int>(width, 0));
+
+    int x = init.x;
+    int y = init.y;
+    int g = costmap[x][y];
+    int f = g + heuristic[x][y];
+    priority_queue<Cell> cells;
+
+    cells.push(Cell(f, g, x, y));
+    bool found = false;
+    bool resign = false;
+    while (!found && !resign)
+    {
+        if (cells.size() == 0)
+            return Position(-1, -1, -1);
+        Cell next = cells.top();
+        cells.pop();
+        int x = next.x;
+        int y = next.y;
+        int g = next.g;
+
+        if (x == (int)goal.x and y == (int)goal.y)
+        {
+            found = true;
+        }
+        else if (abs(x - (int)init.x) + abs(y - (int)init.y) > window_size && window_size)
+        {
+            found = true;
+
+            cout << "Costmap index: " << x << " " << y << endl;
+            double x_transformed = (-y - 0.5 + width) * resolution + originX;
+            double y_transformed = (x + 0.5) * resolution + originY;
+            return Position(x_transformed, y_transformed, 0);
+        }
+        else
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                int x2 = x + delta[i][0];
+                int y2 = y + delta[i][1];
+                if (x2 >= 0 && x2 < height and y2 >= 0 and y2 < width)
+                {
+                    if (closed[x2][y2] == 0)
+                    {
+                        double alpha = atan2(x2 - height / 2, -y2 + width / 2 + 1e-9);
+                        bool isBack = (alpha > bottomLimit && alpha < topLimit) ^ inverse;
+                        if (!isBack)
+                        {
+                            int g2 = costmap[x2][y2];
+                            int f2 = g2 + heuristic[x2][y2];
+                            cells.push(Cell(f2, g2, x2, y2));
+                            closed[x2][y2] = 1;
+                            action[x2][y2] = i;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return Position(-1, -1, -1);
+}*/
 namespace global_planner
 {
     bool PlannerWithCostmap::makePlanService(navfn::MakeNavPlan::Request &req, navfn::MakeNavPlan::Response &resp)

@@ -863,33 +863,17 @@
     <interpolate_x>true</interpolate_x>
     </animation>
 
-    <plugin name="actor1_plugin" filename="libAutonomousActorPlugin.so">
-    <target_weight>1.15</target_weight>
-    <obstacle_weight>5</obstacle_weight>
-    <animation_factor>5.1</animation_factor>
-  <!-- Usage: Initial pose of the actor -->
-    <init_position>1 1 1.21</init_position>
-    <!-- Usage: Modify the set of models that the vector field should
-            ignore when moving the actor -->
-    <ignore_obstacles>
-        <model>FloorB_01_001</model>
-        <model>Carpet_01_001</model>
-        <model>Carpet_01_002</model>
-        <model>actor2_collision_model</model>
-        <model>actor3_collision_model</model>
-    </ignore_obstacles>
-  <!-- Usage: Specify which other actors you want to avoid during wandering -->
-    <actor_awareness>
-        <model>actor2</model>
-        <model>actor3</model>
-    </actor_awareness>
- <!-- Usage: Specify the first target -->
-     <target>-1 -2 1.21</target>
-<!-- Usage: Specify the region where the random targets are computed, it is recommended to stay 0.5 meters from walls -->
-	<room_x>-10 10</room_x>
-	<room_y>-5 5</room_y>
-	<room_z>1.21</room_z>
-    </plugin>
+    <plugin name="actor1_plugin" filename="libMapActorPlugin.so">
+        <target>0 -5 1.2138</target>
+        <target_weight>1.15</target_weight>
+        <obstacle_weight>1.8</obstacle_weight>
+        <animation_factor>5.1</animation_factor>
+        <!-- Usage: Modify the set of models that the vector field should
+             ignore when moving the actor -->
+        <ignore_obstacles>
+          <model>FloorB_01_001</model>
+        </ignore_obstacles>
+      </plugin>
     <!-- Enable collisions-->
     <plugin name="attach_model1" filename="libAttachModelPlugin.so">
       <link>
@@ -929,33 +913,17 @@
     <interpolate_x>true</interpolate_x>
     </animation>
 
-    <plugin name="actor2_plugin" filename="libAutonomousActorPlugin.so">
-    <target_weight>1.15</target_weight>
-    <obstacle_weight>5</obstacle_weight>
-    <animation_factor>5.1</animation_factor>
-  <!-- Usage: Initial pose of the actor -->
-    <init_position>-2 2 1.21</init_position>
-    <!-- Usage: Modify the set of models that the vector field should
-            ignore when moving the actor -->
-    <ignore_obstacles>
-        <model>FloorB_01_001</model>
-        <model>Carpet_01_001</model>
-        <model>Carpet_01_002</model>
-        <model>actor1_collision_model</model>
-        <model>actor3_collision_model</model>
-    </ignore_obstacles>
-  <!-- Usage: Specify which other actors you want to avoid during wandering -->
-    <actor_awareness>
-        <model>actor1</model>
-        <model>actor3</model>
-    </actor_awareness>
- <!-- Usage: Specify the first target -->
-     <target>1 -2 1.21</target>
-<!-- Usage: Specify the region where the random targets are computed, it is recommended to stay 0.5 meters from walls -->
-	<room_x>-10 10</room_x>
-	<room_y>-5 5</room_y>
-	<room_z>1.21</room_z>
-    </plugin>
+    <plugin name="actor2_plugin" filename="libMapActorPlugin.so">
+        <target>0 +5 1.2138</target>
+        <target_weight>1.15</target_weight>
+        <obstacle_weight>1.8</obstacle_weight>
+        <animation_factor>5.1</animation_factor>
+        <!-- Usage: Modify the set of models that the vector field should
+             ignore when moving the actor -->
+        <ignore_obstacles>
+          <model>FloorB_01_001</model>
+        </ignore_obstacles>
+      </plugin>
 
     <!-- Enable collisions -->
     <plugin name="attach_model2" filename="libAttachModelPlugin.so">
@@ -996,33 +964,18 @@
     <interpolate_x>true</interpolate_x>
     </animation>
 
-    <plugin name="actor3_plugin" filename="libAutonomousActorPlugin.so">
-    <target_weight>1.15</target_weight>
-    <obstacle_weight>5</obstacle_weight>
-    <animation_factor>5.1</animation_factor>
-  <!-- Usage: Initial pose of the actor -->
-    <init_position>1 3 1.21</init_position>
-    <!-- Usage: Modify the set of models that the vector field should
-            ignore when moving the actor -->
-    <ignore_obstacles>
-        <model>FloorB_01_001</model>
-        <model>Carpet_01_001</model>
-        <model>Carpet_01_002</model>
-        <model>actor1_collision_model</model>
-        <model>actor2_collision_model</model>
-    </ignore_obstacles>
-  <!-- Usage: Specify which other actors you want to avoid during wandering -->
-    <actor_awareness>
-        <model>actor1</model>
-        <model>actor2</model>
-    </actor_awareness>
- <!-- Usage: Specify the first target -->
-     <target>4 2 1.21</target>
-<!-- Usage: Specify the region where the random targets are computed, it is recommended to stay 0.5 meters from walls -->
-	<room_x>-10 10</room_x>
-	<room_y>-5 5</room_y>
-	<room_z>1.21</room_z>
-    </plugin>
+    <plugin name="actor3_plugin" filename="libMapActorPlugin.so">
+        <target>5 -5 1.2138</target>
+        <target_weight>1.15</target_weight>
+        <obstacle_weight>1.8</obstacle_weight>
+        <animation_factor>5.1</animation_factor>
+        <!-- Usage: Modify the set of models that the vector field should
+             ignore when moving the actor -->
+        <ignore_obstacles>
+          <model>FloorB_01_001</model>
+        </ignore_obstacles>
+      </plugin>
+
     <!-- Enable collisions-->
     <plugin name="attach_model3" filename="libAttachModelPlugin.so">
       <link>
@@ -1033,6 +986,8 @@
       </link>
     </plugin> 
 </actor>
+
+
 
   </world>
 </sdf>

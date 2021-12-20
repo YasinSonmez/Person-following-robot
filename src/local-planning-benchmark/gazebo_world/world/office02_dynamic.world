@@ -11988,13 +11988,19 @@
         <scale>1.0</scale>
       </skin>
       <animation name="walking">
-        <!-- Pedestrian movement mode -->
         <filename>walk.dae</filename>
         <scale>1.000000</scale>
         <interpolate_x>true</interpolate_x>
       </animation>
       <!-- The path of the plugin -->
       <plugin name="actor1_plugin" filename="/usr/share/gazebo-11/examples/plugins/actor_collisions/build/libActorCollisionsPlugin.so">
+        <target>0 -5 1.2138</target>
+        <target_weight>1.15</target_weight>
+        <obstacle_weight>1.8</obstacle_weight>
+        <animation_factor>5.1</animation_factor>
+        <ignore_obstacles>
+          <model>FloorB_01_001</model>
+        </ignore_obstacles>
         <scaling collision="LHipJoint_LeftUpLeg_collision" scale="
           0.01
           0.001
@@ -12096,43 +12102,6 @@
           3.0
         "/>
       </plugin>
-      <script>
-        <!-- Pedestrian trajectory -->
-        <trajectory id="0" type="walking">
-          <waypoint>
-            <time>0</time>
-            <pose>0 8 0 0 0 -1.57 </pose>
-          </waypoint>
-          <waypoint>
-            <time>20</time>
-            <pose>0 4 0 0 0 -1.57 </pose>
-          </waypoint>
-          <waypoint>
-            <time>25</time>
-            <pose>1 4 0 0 0 0 </pose>
-          </waypoint>
-          <waypoint>
-            <time>45</time>
-            <pose>7 4 0 0 0 0 </pose>
-          </waypoint>
-          <waypoint>
-            <time>50</time>
-            <pose>6 4 0 0 0 3.14 </pose>
-          </waypoint>
-          <waypoint>
-            <time>65</time>
-            <pose>0 4 0 0 0 3.14 </pose>
-          </waypoint>
-          <waypoint>
-            <time>70</time>
-            <pose>0 5 0 0 0 1.57 </pose>
-          </waypoint>
-          <waypoint>
-            <time>80</time>
-            <pose>0 8 0 0 0 1.57 </pose>
-          </waypoint>
-        </trajectory>
-      </script>
     </actor>
     <actor name="actor2">
       <pose>-1 8 0 0 0 0</pose>
@@ -12141,13 +12110,19 @@
         <scale>1.0</scale>
       </skin>
       <animation name="walking">
-        <!-- Pedestrian movement mode -->
         <filename>walk.dae</filename>
         <scale>1.000000</scale>
         <interpolate_x>true</interpolate_x>
       </animation>
       <!-- The path of the plugin -->
       <plugin name="actor2_plugin" filename="/usr/share/gazebo-11/examples/plugins/actor_collisions/build/libActorCollisionsPlugin.so">
+        <target>0 +5 1.2138</target>
+        <target_weight>1.15</target_weight>
+        <obstacle_weight>1.8</obstacle_weight>
+        <animation_factor>5.1</animation_factor>
+        <ignore_obstacles>
+          <model>FloorB_01_001</model>
+        </ignore_obstacles>
         <scaling collision="LHipJoint_LeftUpLeg_collision" scale="
           0.01
           0.001
@@ -12249,43 +12224,6 @@
           3.0
         "/>
       </plugin>
-      <script>
-        <!-- Pedestrian trajectory -->
-        <trajectory id="0" type="walking">
-          <waypoint>
-            <time>0</time>
-            <pose>-1 8 0 0 0 0 </pose>
-          </waypoint>
-          <waypoint>
-            <time>20</time>
-            <pose>4 8 0 0 0 0 </pose>
-          </waypoint>
-          <waypoint>
-            <time>25</time>
-            <pose>3 8 0 0 0 -2.356</pose>
-          </waypoint>
-          <waypoint>
-            <time>40</time>
-            <pose>0 5 0 0 0 -2.356 </pose>
-          </waypoint>
-          <waypoint>
-            <time>45</time>
-            <pose>1 6 0 0 0 0.31831 </pose>
-          </waypoint>
-          <waypoint>
-            <time>60</time>
-            <pose>3 8 0 0 0 0.31831 </pose>
-          </waypoint>
-          <waypoint>
-            <time>65</time>
-            <pose>2 8 0 0 0 3.14 </pose>
-          </waypoint>
-          <waypoint>
-            <time>80</time>
-            <pose>-1 8 0 0 0 3.14 </pose>
-          </waypoint>
-        </trajectory>
-      </script>
     </actor>
   </world>
 </sdf>

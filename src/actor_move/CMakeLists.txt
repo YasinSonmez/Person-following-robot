@@ -24,7 +24,12 @@ link_directories(${costmap_2d_INCLUDE_DIRS})
 list(APPEND CMAKE_CXX_FLAGS "${GAZEBO_CXX_FLAGS}")
 
 # Build our plugin
-add_library(MapActorPlugin SHARED MapActorPlugin.cc)
+add_library(MapActorPlugin
+    SHARED
+    MapActorPlugin.cc
+#    plan_utils.cpp
+)
+
 target_link_libraries(MapActorPlugin ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${Boost_LIBRARIES} ${tf2_ros_LIBRARIES} ${costmap_2d_LIBRARIES})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
