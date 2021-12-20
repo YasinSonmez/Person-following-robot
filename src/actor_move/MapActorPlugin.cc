@@ -15,10 +15,6 @@
  *
  */
 
-#include <functional>
-
-#include <ignition/math.hh>
-#include "gazebo/physics/physics.hh"
 #include "MapActorPlugin.hh"
 
 // using namespace gazebo;

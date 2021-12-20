@@ -20,6 +20,10 @@
 
 #include <string>
 #include <vector>
+#include <functional>
+
+#include <ignition/math.hh>
+#include "gazebo/physics/physics.hh"
 
 #include <gazebo/common/Plugin.hh>
 #include <gazebo/physics/physics.hh>
@@ -30,14 +34,8 @@
 #include <ros/console.h>
 #include <ros/callback_queue.h>
 #include <ros/subscribe_options.h>
-#include <std_msgs/Float32.h>
-#include <std_msgs/Int8.h>
 #include <nav_msgs/OccupancyGrid.h>
 #include <nav_msgs/Path.h>
-
-#include <costmap_2d/costmap_2d_ros.h>
-#include <tf2_ros/transform_listener.h>
-#include "plan_utils.h"
 
 namespace gazebo
 {
