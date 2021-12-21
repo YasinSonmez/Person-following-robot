@@ -75,7 +75,7 @@ void gazebo::MapActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf
 void gazebo::MapActorPlugin::OnRosMsg(const nav_msgs::PathConstPtr &_msg)
 {
   this->actor_path = *_msg;
-  path_arrived = true;
+  path_arrived++;
 }
 
 /// \brief ROS helper function that processes messages
@@ -119,6 +119,7 @@ void gazebo::MapActorPlugin::Reset()
 void gazebo::MapActorPlugin::ChooseNewTarget()
 {
   ignition::math::Vector3d newTarget(this->target);
+  // If the path hasn't arrived choose random targets
   if (!path_arrived)
   {
     while ((newTarget - this->target).Length() < 2.0)
@@ -137,13 +138,14 @@ void gazebo::MapActorPlugin::ChooseNewTarget()
       }
     }
   }
+  // If the path arrived follow it
   else
   {
     int path_length = (int)this->actor_path.poses.size();
-    int n = std::max(path_length, 10);
-    newTarget.X(this->actor_path.poses[n - 10].pose.position.x);
-    newTarget.Y(this->actor_path.poses[n - 10].pose.position.y);
-    // ROS_INFO("X: %f  Y: %f N: %d", this->actor_path.poses[n - 10].pose.position.x, this->actor_path.poses[n - 10].pose.position.y, path_length);
+    int n = std::max(path_length, 20);
+    // Follow the every 20th position of the path
+    newTarget.X(this->actor_path.poses[n - 20].pose.position.x);
+    newTarget.Y(this->actor_path.poses[n - 20].pose.position.y);
   }
   this->target = newTarget;
 }
@@ -160,14 +162,13 @@ void gazebo::MapActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   double distance = pos.Length();
 
   // Choose a new target position if the actor has reached its current target.
-  if (distance < 0.01)
+  if (distance < 0.01 || path_arrived == 1)
   {
     this->ChooseNewTarget();
     pos = this->target - pose.Pos();
   }
 
-  // Normalize the direction vector, and apply the target weight
-  // pos = pos.Normalize() * this->targetWeight;
+  // Normalize the direction vector
   pos = pos.Normalize();
 
   // Compute the yaw orientation

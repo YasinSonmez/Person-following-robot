@@ -12,7 +12,7 @@
 #include <std_msgs/String.h>
 #include <time.h>
 #include <costmap_2d/costmap_2d_ros.h>
-#include "plan_utils.h"
+#include "A_star.h"
 
 using namespace std;
 
@@ -23,39 +23,30 @@ class ActorPosPublishNode
 private:
   // Callbacks
   void modelStatesCallback(const gazebo_msgs::ModelStates::ConstPtr &model_states);
-  void odomCallback(const nav_msgs::Odometry::ConstPtr &odom_msg);
   void costmapCallback(const nav_msgs::OccupancyGrid::ConstPtr &costmap_msg);
 
   ros::NodeHandle nh;
 
   // Subscribers
   ros::Subscriber modelStates_sub;
-  ros::Subscriber odom_sub;
   ros::Subscriber costmap_sub;
 
   // Publishers
-  ros::Publisher actor1_target_pos_pub;
-  ros::Publisher actor2_target_pos_pub;
+  std::vector<ros::Publisher> actor_target_pos_pubs;
 
   // Variables
   int height;
   int width;
-  geometry_msgs::Point goal1;
-  geometry_msgs::Point goal2;
-  nav_msgs::Path actor1_path;
-  nav_msgs::Path actor2_path;
-  geometry_msgs::PoseStamped actor1_pose;
-  geometry_msgs::PoseStamped actor2_pose;
-  nav_msgs::Path planned_path1;
-  nav_msgs::Path planned_path2;
+  int num_of_actors = 0;
 
-  nav_msgs::Odometry odom;
+  std::vector<int> actor_idxs;
+  std::vector<geometry_msgs::Point> actor_poses;
+  std::vector<nav_msgs::Path> actor_paths;
+
+  std::vector<pair<int, int>> goals;
+
   nav_msgs::OccupancyGrid costmap;
-  geometry_msgs::PoseStamped odom_in_map_frame;
-  geometry_msgs::TransformStamped odom_to_map;
-  tf2_ros::Buffer tf_buffer;
   bool actor_message_arrived = false;
-  std::vector<geometry_msgs::PoseStamped> plan;
 
   ros::Time begin;
 
