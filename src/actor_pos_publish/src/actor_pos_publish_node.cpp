@@ -66,7 +66,9 @@ void ActorPosPublishNode::modelStatesCallback(const gazebo_msgs::ModelStates::Co
 
 	// Set the position of each actor pose if not the first time
 	for (int i = 0; i < num_of_actors; i++)
+	{
 		actor_poses[i] = model_states->pose[actor_idxs[i]].position;
+	}
 }
 
 /****************************************MAIN LOOP***********************************************
@@ -77,12 +79,13 @@ void ActorPosPublishNode::mainLoop()
 	if (actor_message_arrived)
 	{
 		// Find the maximum possible distance from the actor we will generate targets to
-		int max_len = (int)(7.0 / costmap.info.resolution);
+		int max_len = (int)(10.0 / costmap.info.resolution);
 
 		// Iterate over each actor to find the paths independently
 		for (int i = 0; i < num_of_actors; i++)
 		{
 			// Find the index on the map corresponding to actor's position
+
 			pair<int, int> init_idx = map_to_idx(
 				actor_poses[i].x, actor_poses[i].y,
 				costmap.info.width, costmap.info.height,
@@ -110,6 +113,7 @@ void ActorPosPublishNode::mainLoop()
 					// Find how distant the point is from the actor, if less than max_len
 					// and the costmap value corresponding to target is 0, proceed
 					int difference = abs(init_idx.first - x_idx) + abs(init_idx.second - y_idx);
+
 					if ((difference < max_len) && (costmap.data[x_idx * width + (width - 1 - y_idx)] == 0))
 					{
 						// If goals doesn't have enough values, push back. Otherwise, set the value
@@ -129,6 +133,7 @@ void ActorPosPublishNode::mainLoop()
 					}
 				}
 			}
+
 			// If actor_paths doesn't have enough values, push back. Otherwise, set the value
 			if (actor_paths.size() == i)
 				actor_paths.push_back(a_star(init_idx, goals[i], costmap));
