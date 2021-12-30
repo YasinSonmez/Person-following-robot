@@ -6,7 +6,7 @@ Panels:
       Expanded:
         - /Odometry1/Covariance1/Position1
       Splitter Ratio: 0.6050959825515747
-    Tree Height: 1106
+    Tree Height: 349
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -489,7 +489,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 30.543285369873047
+      Distance: 36.682071685791016
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1

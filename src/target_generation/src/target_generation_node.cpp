@@ -167,7 +167,7 @@ int main(int argc, char **argv)
 	ros::init(argc, argv, "target_generation");
 
 	TargetNode node;
-	ros::Rate loop_rate(2);
+	ros::Rate loop_rate(5);
 
 	while (ros::ok())
 	{
