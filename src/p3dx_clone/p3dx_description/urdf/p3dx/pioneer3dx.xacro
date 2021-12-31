@@ -10,10 +10,15 @@
   <xacro:include filename="$(find p3dx_description)/urdf/p3dx/pioneer3dx_body.xacro"/>
   <xacro:pioneer3dx_body name="chassis" parent="base_link" meshes="package://p3dx_description/meshes/p3dx"/>
 
+  <!-- ZED Camera -->
+  <xacro:include filename="$(find zed_description)/urdf/zed_descr.urdf.xacro"/>  
+  <xacro:stereolabs_camera parent="chassis">
+    <origin xyz="0 0 1.0" rpy="0 0 0"/>
+  </xacro:stereolabs_camera> 
+
   <!-- Hokuyo UTM-30LX -->
   <xacro:include filename="$(find p3dx_description)/urdf/sensors/hokuyo_utm30lx.urdf.xacro" />
   <xacro:sensor_hokuyo_utm30lx prefix="hokuyo_utm30lx" parent="chassis" meshes="package://p3dx_description/meshes/sensors" min_angle="${-135.0*M_PI/180.0}" max_angle="${135.0*M_PI/180.0}" >
     <origin xyz="0.12 0 0.23" rpy="0 0 0"/>
   </xacro:sensor_hokuyo_utm30lx>
-
 </robot>
