@@ -35,12 +35,12 @@
     <param name="local_costmap/global_frame" value="$(arg global_frame)" />
 
     <param name="base_global_planner" value="global_planner/GlobalPlanner" />
-    <param name="planner_frequency" value="2.0" />
-    <param name="planner_patience" value="3.0" />
+    <param name="planner_frequency" value="5.0" />
+    <param name="planner_patience" value="5.0" />
 
     <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
-    <param name="controller_frequency" value="10.0" />
-    <param name="controller_patience" value="5.0" />
+    <param name="controller_frequency" value="15.0" />
+    <param name="controller_patience" value="15.0" />
 
     <param name="log_filename" value="$(arg log_filename)" />
     <remap from="cmd_vel" to="RosAria/cmd_vel"/>
@@ -68,6 +68,11 @@
     <arg name="initial_pose_y" value="$(arg initial_pose_y)" />
     <arg name="initial_pose_a" value="$(arg initial_pose_a)" />
   </include>
+
+  <!-- Spawn segway mobile robot 
+  <include file="$(find segway_gazebo)/launch/spawn_segway.launch"/>-->
+  <!-- Launch widowx gazebo ros_control 
+  <include file="$(find widowx_turret_controller)/launch/widowx_turret_gazebo_controller.launch"/>-->
 
   <!--  **************** Visualisation ****************  -->
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find move_base_benchmark)/launch/rviz_navigation.rviz"/>
