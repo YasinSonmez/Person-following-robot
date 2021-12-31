@@ -1,8 +1,10 @@
 # Person Following, Dynamic Obstacle Avoiding Autonomous Robot
-The goal of this project is to develop a robot that is able to follow a human by avoiding static anddynamic obstacles by generating socially aware trajectories that don’t interfere with the paths ofdynamic objects in the scene.  The robot possesses computers and various sensors such as camerasand laser range sensors onboard so that it can calculate everything on the go.  The aim of the robotis to help humans in various scenarios by following them and aiding them.
+The goal of this project is to develop a robot that is able to follow a human by avoiding static and dynamic obstacles by generating socially aware trajectories that don’t interfere with the paths of dynamic objects in the scene.  The robot possesses computers and various sensors such as cameras and laser range sensors onboard so that it can calculate everything on the go.  The aim of the robot is to help humans in various scenarios by following them and aiding them.
 
 
-https://user-images.githubusercontent.com/37510173/141680562-153b4f49-9b82-4cec-bbff-87429644d637.mp4
+
+https://user-images.githubusercontent.com/37510173/147821371-5ab8effb-25c9-4af0-82fd-5e1cbfb74474.mp4
+
 
 ## 1. Quick Start
 
@@ -37,7 +39,9 @@ $ roslaunch move_base_benchmark simple_navigation_goals.launch
 You can also select goals for the robot using the ```2D Nav Goal``` tool in ```RViz```.
 
 ## 2. Setup
-### 2.1 Actor Collisions Plugin
+### 2.1 Gazebo-Map-Actor-Plugin
+Follow the steps from [Gazebo-Map-Actor-Plugin](https://github.com/YasinSonmez/Gazebo-Map-Actor-Plugin) to compile the gazebo plugin for the actors and see how to use the actors and actor position publisher node.
+### 2.2 Actor Collisions Plugin
 We use [**Actor Collisions Plugin**](https://github.com/osrf/gazebo/tree/gazebo11/examples/plugins/actor_collisions) to give dynamic pedestrians collision properties, so that they can be swept by the laser rangefinder. From the actor_collisions directory
 ```
 $ mkdir build
@@ -46,22 +50,14 @@ $ cmake ../
 $ make
 ```
 After that, a library named "libActorCollisionsPlugin.so" will be generated in the build directory. Please update the reference path of "libActorCollisionsPlugin.so" in the xxx_dynamic.world files in the gazebo_world/world directory before you use the dynamic world models. For example, open office02_dynamic.world and use "ctrl+F" to find "libActorCollisionsPlugin.so". Then, replace the value of "filename" with the absolute path of "libActorCollisionsPlugin.so" in your build directory of actor_collisions. Each animated actor needs to call this plugin. Therefore, please check all the reference paths of this plugin in the dynamic world models.
-### 2.1 Actor Move Plugin
-Please do the same steps for the actor move directory where the plugin that we have created to move the actors are stored. From the actor_move directory
-```
-$ mkdir build
-$ cd build
-$ cmake ../
-$ make
-```
 ## 3. Using Target Generation Node
-2. Run roscore:
+1. Launch any launch file from local-planning-benchmark/move_base_benchmark/launch directory:
 ```
-roscore
+roslaunch move_base_benchmark move_base_benchmark_small_house_dynamic_map.launch
 ```
-2. Launch any launch file from local-planning-benchmark/move_base_benchmark/launch directory:
+2. Run the actor pos publisher node:
 ```
-roslaunch move_base_benchmark move_base_benchmark_office02_dynamic.launch
+rosrun actor_pos_publish actor_pos_publish_node
 ```
 3. Run the target generation node:
 ```
