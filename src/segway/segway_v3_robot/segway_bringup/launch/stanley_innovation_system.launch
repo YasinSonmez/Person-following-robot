@@ -1,0 +1,23 @@
+<!-- Launch file for Stanley Innovation enabled Segway RMP startup -->
+
+<launch>
+    <!-- ROS Driver, Robot State Publisher, and sensors -->
+    <node pkg="si_utils" type="timed_roslaunch"
+        args="1 segway_bringup segway.launch"
+        name="platform_bringup" output="screen"/>
+
+    <!-- Sensor bringup for platforms that contain sensors-->
+    <node pkg="si_utils" type="timed_roslaunch"
+        args="3 segway_bringup segway_sensors.launch"
+        name="sensor_bringup" output="screen"/>
+
+    <!-- Platform specific odometry estimate -->
+    <node pkg="si_utils" type="timed_roslaunch"
+        args="5 segway_bringup segway_odometry.launch"
+        name="odometry_bringup" output="screen"/>
+        
+    <!-- Platform Teleoperation -->
+    <node pkg="si_utils" type="timed_roslaunch"
+        args="7 segway_bringup segway_teleop.launch"
+        name="teleop_bringup" output="screen"/>    
+</launch>

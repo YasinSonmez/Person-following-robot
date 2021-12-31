@@ -1,0 +1,29 @@
+<!-- Launch file for Segway teleop startup -->
+
+<launch>
+    <arg name="robot_name" default="$(optenv SEGWAY_BASE_PLATFORM RMP_210)"/>
+    <arg name="sim" default="false"/>
+
+    <node pkg="joy" type="joy_node" name="joy_node" if="$(optenv SEGWAY_HAS_ONBOARD_JOY false)">
+        <param name="dev" type="string" value="$(optenv SEGWAY_JOY_DEV /dev/input/js0)" />
+        <param name="deadzone" type="double" value="$(optenv SEGWAY_JOY_DEADZONE 0.1)" />
+        <param name="autorepeat_rate" type="double" value="50" />
+    </node>
+    
+    <node pkg="segway_ros" ns="segway" type="segway_teleop" name="segway_teleop" output="screen">
+        <rosparam file="$(find segway_bringup)/launch/teleop/config/$(optenv SEGWAY_JOY_MAPPING xbox360).yaml" command="load"/>
+        <param name="sim" value="$(arg sim)"/>
+    </node>
+    
+    <node pkg="segway_ros" ns="segway" type="segway_marker_ctrl" name="segway_marker_ctrl" output="screen">
+        <param name="sim" value="$(arg sim)"/>
+        <param name="robot_name" value="$(arg robot_name)"/>
+    </node>
+    
+    <group ns="segway">
+        <node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager"/>
+        <node pkg="nodelet" type="nodelet" name="cmd_vel_mux" args="load yocs_cmd_vel_mux/CmdVelMuxNodelet nodelet_manager">
+            <param name="yaml_cfg_file" value="$(find segway_bringup)/launch/teleop/config/cmd_vel_mux.yaml"/>
+        </node>
+    </group>
+</launch> 

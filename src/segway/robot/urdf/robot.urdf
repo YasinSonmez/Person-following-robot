@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="robot">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.0360380993776957 -0.000410073967294581 0.03690275657395"
+        rpy="0 0 0" />
+      <mass
+        value="130.144212732607" />
+      <inertia
+        ixx="7.0555285312449"
+        ixy="-0.0252709930386588"
+        ixz="-0.121142779686728"
+        iyy="6.21408523089706"
+        iyz="0.0209212086050636"
+        izz="3.38070852325745" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="ara_parca_link">
+    <inertial>
+      <origin
+        xyz="0 1.0588621593521E-17 -0.0578639244522826"
+        rpy="0 0 0" />
+      <mass
+        value="1.34982525666118" />
+      <inertia
+        ixx="0.00281891394775808"
+        ixy="4.74338450462408E-20"
+        ixz="-1.00425720957971E-19"
+        iyy="0.00281891394775808"
+        iyz="4.93059029226279E-20"
+        izz="0.00262460867965498" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot/meshes/ara_parca_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot/meshes/ara_parca_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="ara_parca_joint"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 -0.011591" />
+    <parent
+      link="base_link" />
+    <child
+      link="ara_parca_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="pt_link">
+    <inertial>
+      <origin
+        xyz="-0.0193781388090414 0.000671454544267212 0.0736333463420169"
+        rpy="0 0 0" />
+      <mass
+        value="0.202857209325481" />
+      <inertia
+        ixx="0.000269774540977276"
+        ixy="3.05598026652947E-07"
+        ixz="-4.92121564176597E-05"
+        iyy="0.000295633797549966"
+        iyz="-3.75131881031855E-07"
+        izz="0.000289215649910664" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot/meshes/pt_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot/meshes/pt_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="pt_joint"
+    type="fixed">
+    <origin
+	    xyz="0 0 0"
+      rpy="0 0 -3.1317" />
+    <parent
+      link="ara_parca_link" />
+    <child
+      link="pt_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="kafa_link">
+    <inertial>
+      <origin
+        xyz="0.18065 -0.034976 -0.015996"
+        rpy="0 0 0" />
+      <mass
+        value="0.98095" />
+      <inertia
+        ixx="0.0086192"
+        ixy="-4.0365E-07"
+        ixz="0.00068816"
+        iyy="0.0073775"
+        iyz="1.5958E-09"
+        izz="0.0082719" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot/meshes/kafa_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot/meshes/kafa_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="kafa_joint"
+    type="fixed">
+    <origin
+      xyz="-0.02 -0.023159 0"
+      rpy="0.0094676 0 -3.14" />
+    <parent
+      link="pt_link" />
+    <child
+      link="kafa_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="kabuk_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0" />
+      <inertia
+        ixx="0"
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot/meshes/kabuk_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot/meshes/kabuk_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="kabuk_joint"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="kabuk_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+</robot>

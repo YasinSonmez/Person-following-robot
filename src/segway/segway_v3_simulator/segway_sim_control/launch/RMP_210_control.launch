@@ -1,0 +1,79 @@
+<!-- Simulation control configuration -->
+<launch>
+    <!-- Load joint controller configurations from YAML file to parameter server -->
+    <rosparam command="load" file="$(find segway_sim_control)/config/control/RMP_210_control.yaml" />
+    
+    <!-- load the controllers -->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen"  args="joint_state_controller
+				                       diff_vel_controller
+				                       front_caster_swivel_controller
+				                       front_caster_wheel_controller
+				                       rear_caster_swivel_controller
+				                       rear_caster_wheel_controller
+				                       --shutdown-timeout 0.5" />
+    
+    <node name="cmd_relay" pkg="topic_tools" type="relay" args="segway/cmd_vel diff_vel_controller/cmd_vel "/>
+    <node name="feedback_relay" pkg="topic_tools" type="relay" args="diff_vel_controller/odom segway/feedback/wheel_odometry "/>
+    
+    <!-- This node will take in measurements from odometry, IMU, stamped pose, and stamped twist messages. It tracks
+         the state of the robot, with the state vector being defined as X position, Y position, Z position,
+         roll, pitch, yaw, their respective velocites, and linear acceleration. Units for all measurements are assumed
+         to conform to the SI standard as specified in REP-103. -->
+    <include file="$(find segway_bringup)/launch/localization/segway_odometry.launch" >
+        <arg name="use_platform_odometry" value="false"/>
+    </include>
+    
+    <include file="$(find segway_bringup)/launch/teleop/segway_teleop.launch" >
+        <arg name="sim" value="true"/>
+    </include>
+    
+    <group if="$(optenv SEGWAY_HAS_SECOND_2D_LASER false)">
+        <node pkg="ira_laser_tools" name="laserscan_multi_merger" type="laserscan_multi_merger" output="screen">
+            <param name="destination_frame" value="segway/base_link"/>
+            <param name="cloud_destination_topic" value="/segway/merged_cloud"/>
+            <param name="scan_destination_topic" value="/segway/scan_multi"/>
+            <param name="laserscan_topics" value ="/segway/$(optenv LASER1_PREFIX front)_scan /segway/$(optenv LASER2_PREFIX rear)_scan"/>
+        </node>
+        <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="segway_laser_filter" clear_params="true" respawn="true">
+            <remap from="scan" to="/segway/scan_multi" />
+            <remap from="scan_filtered" to="/segway/filtered_scan" />
+            <param name="target_frame" value="segway/base_link" />
+            <param name="high_fidelity" value="true" />
+            <rosparam command="load" 
+                file="$(find segway_bringup)/launch/sensors/config/$(optenv SEGWAY_PLATFORM_NAME RMP_210)/2d_scan_filter.yaml" />
+        </node>
+     </group>
+	
+	<group if="$(optenv SEGWAY_HAS_ONE_2D_LASER false)">
+        <node pkg="topic_tools" type="relay" name="segway_laser_filter" args="/segway/$(optenv LASER1_PREFIX front)_scan /segway/filtered_scan" unless="$(optenv SEGWAY_HAS_SECOND_2D_LASER false)"/>
+    </group>
+
+	<group if="$(optenv SEGWAY_HAS_VLP16 false)">
+	
+	    <node pkg="point_cloud_converter" name="point_cloud_converter" type="point_cloud_converter_node" >
+		    <remap from="points_in" to="velodyne_pointcloud"/>
+		    <remap from="points2_out" to="velodyne_points" />
+	    </node>
+
+        <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan_node" output="screen">
+            <remap from="cloud_in" to="/velodyne_points"/>
+            <remap from="scan" to="/segway/scan"/>
+            <param name="min_height" value="0.0"/>
+            <param name="max_height" value="1.0"/>
+            <param name="range_min" value="0.9" />
+            <param name="range_max" value="100.0" />
+            <param name="concurrency_level" value="0" />
+            <param name="use_inf" value="false" />
+        </node>
+        
+        <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="segway_laser_filter" clear_params="true" respawn="true">
+            <remap from="scan" to="/segway/scan" />
+            <remap from="scan_filtered" to="/segway/filtered_scan" />
+            <param name="high_fidelity" value="true" />
+            <rosparam command="load" 
+                file="$(find segway_bringup)/launch/sensors/config/$(optenv SEGWAY_PLATFORM_NAME RMP_210)/3d_scan_filter.yaml" />
+        </node>
+	</group>    
+    
+</launch>

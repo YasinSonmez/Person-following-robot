@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<launch>
+    <!-- Load the Robot Description-->
+    <include file="$(find widowx_turret_description)/launch/load_description.launch"/>
+
+  <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+  <node name="spawn_widowx_turret_model" pkg="gazebo_ros" type="spawn_model"
+    args="-urdf -model widowx_turret -param robot_description"/>
+    
+    <!-- Launch widowx gazebo ros_control -->
+    <include file="$(find widowx_turret_controller)/launch/widowx_turret_gazebo_controller.launch"/>
+
+</launch>

@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<robot name="widowx_turret" xmlns:xacro="http://ros.org/wiki/xacro">
+	<xacro:include filename="$(find widowx_turret_description)/urdf/widowx_turret.urdf.xacro"/>
+	
+	<link name="base_footprint">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<box size="0.001 0.001 0.001" />
+			</geometry>
+		</visual>
+	</link>
+	<xacro:widowx_turret parent="base_footprint" prefix="">
+		<origin xyz="10.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+	</xacro:widowx_turret>
+</robot>

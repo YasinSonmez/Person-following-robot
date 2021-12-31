@@ -1,0 +1,17 @@
+<!-- GMAPPING SLAM Demo -->
+
+<launch>
+    <arg name="robot_name" default="$(optenv SEGWAY_PLATFORM_NAME RMP210)"/>
+    
+    <!--- Run Assisted Teleop -->
+    <include file="$(find segway_navigation_apps)/launch/assisted_teleop_demo.launch" >
+        <arg name="robot_name" value="$(arg robot_name)" />
+    </include>
+       
+    <!--- Run gmapping -->
+    <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping">
+        <rosparam command="load" file="$(find segway_navigation_apps)/config/$(arg robot_name)/gmapping.yaml"/>
+        <remap from="scan" to="/segway/filtered_scan" />
+    </node>
+
+</launch>

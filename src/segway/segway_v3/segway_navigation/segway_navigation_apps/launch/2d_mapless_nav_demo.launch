@@ -1,0 +1,22 @@
+<!-- 2D Mapless navigation Demo -->
+
+<launch>
+    <arg name="balancing_enabled" default="$(optenv SEGWAY_RUNS_IN_BALANCE_MODE false)"/>
+    <arg name="sim" default="false"/>
+    
+    <!-- Run segway_move_base action client for tracking status -->
+    <node pkg="segway_ros" name="segway_move_base" type="segway_move_base" output="screen">
+        <param name="sim" value="$(arg sim)"/> 
+        <param name="using_amcl" value="false"/>
+        <param name="global_frame" value="/odom"/>
+        <param name="goal_timeout_sec" value="300"/>
+        <param name="platform_mode" value="tractor" unless="$(arg balancing_enabled)"/>
+        <param name="platform_mode" value="balance" if="$(arg balancing_enabled)"/>
+    </node>
+
+    <!--- Run Move Base -->
+    <include file="$(find segway_navigation_apps)/launch/move_base.launch" >
+        <arg name="no_static_map" value="true"/>
+        <arg name="use_dwa" value="true"/>
+    </include>
+</launch>

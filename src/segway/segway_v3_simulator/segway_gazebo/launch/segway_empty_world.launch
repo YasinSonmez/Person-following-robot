@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="world_name" default="worlds/empty.world"/>
+  <arg name="rviz" default="false"/>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch"> 
+	  <arg name="world_name" value="$(find segway_gazebo)/worlds/example.world"/>   <!-- world_name is wrt GAZEBO_RESOURCE_PATH environment variable -->
+	  <!--<arg name="world_name" value="worlds/empty_world.world"/>-->
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+  
+  <include file="$(find segway_gazebo)/launch/spawn_segway.launch"/>
+    <!-- Launch widowx gazebo ros_control -->
+  <include file="$(find widowx_turret_controller)/launch/widowx_turret_gazebo_controller.launch"/> 
+
+  <node if="$(arg rviz)" pkg="rviz" type="rviz" name="$(anon rviz)" respawn="false" output="screen" args="-d $(find segway_gazebo)/rviz/example.rviz" />
+  <node pkg="widowx_turret_controller" name="pt_cmd" type="pt_cmd"/>
+  <!-- <node pkg="apfrl" name="apf_rl_0707" type="apf_rl_0707.py"/> -->
+  <node pkg="obj_detection" name="navigate_goal" type="navigate_goal.py"/>
+</launch>

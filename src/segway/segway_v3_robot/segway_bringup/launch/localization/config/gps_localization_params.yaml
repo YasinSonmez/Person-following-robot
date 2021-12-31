@@ -1,0 +1,81 @@
+###======== STANDARD PARAMETERS ========###
+
+# The filter accepts an arbitrary number of inputs from each input message type (Odometry, PoseStamped,
+# TwistStamped, Imu). To add a new one, simply append the next number in the sequence to its base name,
+# e.g., odom0, odom1, twist0, twist1, imu0, imu1, imu2, etc. The value should be the topic name. These
+# parameters obviously have no default values, and must be specified.
+odom0:  /segway/feedback/wheel_odometry
+odom1:  /segway/odometry/gps
+imu0:   /segway/feedback/segway_imu
+imu1:   /segway/feedback/ext_imu
+
+
+# Each sensor reading updates some or all of the filter's state. These options give you greater control over
+# which values from each measurement are fed to the filter. For example, if you have an odometry message as input,
+# but only want to use its Z position value, then set the entire vector to false, except for the third entry.
+# The order of the values is x, y, z, roll, pitch, yaw, vx, vy, vz, vroll, vpitch, vyaw, ax, ay, az. Note that not some
+# message types lack certain variables. For example, a TwistWithCovarianceStamped message has no pose information, so
+# the first six values would be meaningless in that case. Each vector defaults to all false if unspecified, effectively
+# making this parameter required for each sensor.
+odom0_config:  [true, true, false,
+                false, false, true,
+                false, false, false,
+                false, false, false,
+                false, false, false]
+                
+odom1_config:   [true,  true, false, 
+                 false, false, false, 
+                 false, false, false, 
+                 false, false, false,
+                 false, false, false]
+
+imu0_config:    [false, false, false,
+                 true,  true,  false,
+                 false, false, false,
+                 true,  true,  true,
+                 false, false, false]
+                 
+imu1_config:    [false, false, false,
+                 true,  true,  false,
+                 false, false, false,
+                 true,  true,  true,
+                 false, false, false]
+
+# The best practice for including new sensors in robot_localization's state estimation nodes is to pass in velocity 
+# measurements and let the nodoes integrate them. However, this isn't always feasible, and so the state estimation
+# nodes support fusion of absolute measurements. If you have more than one sensor providing absolute measurements, 
+# however, you will quickly run into problems, as the sensors will inevitably diverge from one another, causing the 
+# filter to jump back and forth rapidly. To combat this situation, you can set the sensor's differential parameter 
+# to true. This will carry out differential integration of the sensor data, i.e., it will repeatedly integrate the 
+# difference between a given measurement and the previous measurement from that sensor. 
+# NOTE: this only applies to sensors that provide absolute measurements, so Twist messages are not supported.
+odom0_differential: true
+odom1_differential: true
+imu0_differential:  true
+imu1_differential:  true
+imu2_differential:  true
+
+###======== ADVANCED PARAMETERS ========###
+
+# By default, the subscription queue size for each message type is 1. If you wish to increase that so as not
+# miss any messages (even if your frequency is set to a relatively small value), increase these.
+odom1_queue_size:  10
+odom0_queue_size:  10
+imu0_queue_size:   10
+imu1_queue_size:   10
+
+# If your data is subject to outliers, use these threshold settings, expressed as Mahalanobis distances, to control
+# how far away from the current vehicle state a sensor measurement is permitted to be. Each defaults to
+# numeric_limits<double>::max() if unspecified.
+#odom0_pose_rejection_threshold:  5
+#odom0_twist_rejection_threshold: 1
+#odom1_pose_rejection_threshold:  5
+#odom1_twist_rejection_threshold: 1
+#imu0_pose_rejection_threshold:                      0.3
+#imu0_twist_rejection_threshold:                     0.1
+#imu0_linear_acceleration_rejection_threshold:       0.1
+#imu1_pose_rejection_threshold:                      0.3
+#imu1_twist_rejection_threshold:                     0.1
+#imu1_linear_acceleration_rejection_threshold:       0.1
+
+

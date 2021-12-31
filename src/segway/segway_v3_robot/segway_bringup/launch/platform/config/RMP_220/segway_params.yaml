@@ -1,0 +1,17 @@
+vel_limit_mps:            1.0
+accel_limit_mps2:         2.5000
+decel_limit_mps2:         2.5000
+dtz_decel_limit_mps2:     2.5000
+yaw_rate_limit_rps:       1.0
+yaw_accel_limit_rps2:     3.2
+lateral_accel_limit_mps2: 4.905000
+tire_rolling_diameter_m:  0.462280
+wheel_base_length_m:      0.584200
+wheel_track_width_m:      0.542391
+gear_ratio:               24.266700
+enable_audio:             1
+motion_while_charging:    0
+balance_mode_enabled:     0
+balace_gains:             0
+vel_ctl_input_filter:     0
+yaw_ctl_input_filter:     0

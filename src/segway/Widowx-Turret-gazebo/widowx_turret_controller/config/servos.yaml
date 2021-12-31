@@ -1,0 +1,10 @@
+port: /dev/ttyUSB_WIDOWX_TURRET
+read_rate: 15
+write_rate: 25
+joints: {
+    servo_pan_joint: {id: 1, ticks: 4096, range: 360.0, min_angle: -180.0, max_angle: 180.0, max_speed: 50.0},
+    servo_tilt_joint: {id: 2, ticks: 4096, range: 360.0, min_angle: -90.0, max_angle: 90.0, max_speed: 50.0},
+}
+controllers: {
+    turret_controller: {type: follow_controller, joints: [servo_pan_joint, servo_tilt_joint]},
+}

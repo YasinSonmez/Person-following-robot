@@ -1,0 +1,14 @@
+<!-- Launch file for Stanley Innovation enabled Segway RMP startup -->
+
+<launch>
+    <!-- ROS Driver, Robot State Publisher, and sensors -->
+    <node pkg="si_utils" type="timed_roslaunch"
+        args="1 segway_gazebo segway_playpen.launch"
+        name="platform_bringup" output="screen"/>
+
+    <!-- Sensor bringup for platforms that contain sensors-->
+    <node pkg="si_utils" type="timed_roslaunch"
+        args="10 segway_viz view_robot.launch"
+        name="sensor_bringup" output="screen"/>
+        
+</launch>

@@ -1,0 +1,6 @@
+cloud_filter_chain:
+- type: segway_navigation_perception/PointCloudFootprintFilter
+  name: footprint_filter
+  params:
+    inscribed_radius: 0.325
+    base_link_frame: /segway/base_link

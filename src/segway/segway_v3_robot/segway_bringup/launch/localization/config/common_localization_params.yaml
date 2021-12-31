@@ -1,0 +1,101 @@
+###======== STANDARD PARAMETERS ========###
+
+# The frequency, in Hz, at which the filter will output a position estimate. Note that
+# the filter will not begin computation until it receives at least one message from
+# one of the inputs. It will then run continuously at the frequency specified here,
+# regardless of whether it receives more measurements. Defaults to 30 if unspecified.
+frequency: 30.0
+
+# The period, in seconds, after which we consider a sensor to have timed out. In this event, we
+# carry out a predict cycle on the EKF without correcting it. This parameter can be thought of
+# as the minimum frequency with which the filter will generate new output. Defaults to 1 / frequency
+# if not specified
+sensor_timeout: 0.1
+
+# If this is set to true, no 3D information will be used in your state estimate. Use this if you
+# are operating in a planar environment and want to ignore the effect of small variations in the
+# ground plane that might otherwise be detected by, for example, an IMU. Defaults to false if
+# unspecified.
+two_d_mode: true
+
+# REP-105 (http://www.ros.org/reps/rep-0105.html) specifies three principal coordinate frames: map, 
+# odom, and base_link. base_link is the coordinate frame that is affixed to the robot. The robot's 
+# position in the odom frame will drift over time, but is accurate in the short term and should be 
+# continuous. The odom frame is therefore the best frame for executing local motion plans. The map 
+# frame, like the odom frame, is a world-fixed coordinate frame, and while it contains the most 
+# globally accurate position estimate for your robot, it is subject to discrete jumps, e.g., due to 
+# the fusion of GPS data. Here is how to use the following settings:
+#  1. Set the map_frame, odom_frame, and base_link frames to the appropriate frame names for your system.
+#     * If your system does not have a map_frame, just remove it, and make sure "world_frame" is set
+#     to the value of odom_frame.
+#  2. If you are fusing continuous position data such as wheel encoder odometry, visual odometry, or IMU data,
+#     set "world_frame" to your odom_frame value. This is the default behavior for robot_localization's state 
+#     estimation nodes.
+#  3. If you are fusing global absolute position data that is subject to discrete jumps (e.g., GPS or position
+#     updates from landmark observations) then:
+#         3a. Set your "world_frame" to your map_frame value
+#         3b. MAKE SURE something else is generating the odom->base_link transform. Note that this can even be
+#             another instance of robot_localization! However, that instance should *not* fuse the global data.
+odom_frame:      odom
+base_link_frame: base_link
+world_frame:     odom
+
+# If you're having trouble, try setting this to true, and then use rqt_console to see diagnostic information
+# about your data and settings.
+print_diagnostics: false
+
+###======== ADVANCED PARAMETERS ========###
+
+# Debug settings. Not for the faint of heart. Outputs a ludicrous amount of information to the file
+# specified by debug_out_file. I hope you like matrices! Defaults to false if unspecified.
+debug: false
+
+# Defaults to "robot_localization_debug.txt" if unspecified.
+debug_out_file: debug_ekf_localization.txt
+
+# The process noise covariance matrix can be difficult to tune, and can vary for each application, so it
+# is exposed as a configuration parameter. PLEASE NOTE that every value in this matrix *must* be specified
+# as real-valued, i.e., it must have a decimal point. Integers don't load correctly. The values are ordered
+# as x, y, z, roll, pitch, yaw, vx, vy, vz, vroll, vpitch, vyaw, ax, ay, az. Defaults to the matrix below if
+# unspecified.
+process_noise_covariance:   [0.05, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                             0.0, 0.05, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.06, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.0, 0.03, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.0, 0.0, 0.03, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.0, 0.0, 0.0, 0.06, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.025, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.025, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.04, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.0, 0.0, 0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.0, 0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.02, 0.0, 0.0, 0.0,
+                             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.0, 0.0,
+                             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.0,
+                             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.015]
+                             
+                             
+# This represents the initial value for the state estimate error covariance matrix. Setting a diagonal value (a
+# variance) to a large value will result in early measurements for that variable being accepted quickly. Users should
+# take care not to use large values for variables that will not be measured directly. PLEASE NOTE that every value
+# in this matrix *must* be specified as real-valued, i.e., it must have a decimal point. Integers don't load correctly.
+# The values are ordered as x, y, z, roll, pitch, yaw, vx, vy, vz, vroll, vpitch, vyaw, ax, ay, az. Defaults to the
+# matrix below if unspecified.
+initial_estimate_covariance: [1e-9, 0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    0,    0,
+                              0,    1e-9, 0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    0,    0,
+                              0,    0,    1e-9, 0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    0,    0,
+                              0,    0,    0,    1e-9, 0,    0,    0,    0,    0,    0,     0,     0,     0,    0,    0,
+                              0,    0,    0,    0,    1e-9, 0,    0,    0,    0,    0,     0,     0,     0,    0,    0,
+                              0,    0,    0,    0,    0,    1e-9, 0,    0,    0,    0,     0,     0,     0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    1e-9, 0,    0,    0,     0,     0,     0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,    1e-9, 0,    0,     0,     0,     0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,    0,    1e-9, 0,     0,     0,     0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,    0,    0,    1e-9,  0,     0,     0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     1e-9,  0,     0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     1e-9,  0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     1e-9, 0,    0,
+                              0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    1e-9, 0,
+                              0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    0,    1e-9]
+                              
+
+

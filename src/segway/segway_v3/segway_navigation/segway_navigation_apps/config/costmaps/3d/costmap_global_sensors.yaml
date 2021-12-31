@@ -1,0 +1,14 @@
+global_costmap:
+  global_frame:               /odom
+  rolling_window:             true
+  track_unknown_space:        true
+  width:                      100.0
+  height:                     100.0
+  origin_x:                   -50.0
+  origin_y:                   -50.0
+
+  plugins:
+    - {name: obstacles_costmap2d,       type: "costmap_2d::ObstacleLayer"}
+    - {name: obstacles_voxel_grid,      type: "costmap_2d::VoxelLayer"}
+    - {name: inflation,                 type: "costmap_2d::InflationLayer"}
+

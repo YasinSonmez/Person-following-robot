@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+
+ <rosparam file="$(find widowx_turret_controller)/config/widowx_control.yaml" command="load"/> 
+    <!-- load the controllers -->
+  <node name="controller_spawner_pt" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" args="pan_controller tilt_controller"/>
+    
+  <node name="robot_state_publisher_pt" pkg="robot_state_publisher" type="robot_state_publisher"/>
+</launch>

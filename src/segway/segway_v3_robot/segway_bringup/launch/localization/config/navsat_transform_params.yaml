@@ -1,0 +1,25 @@
+###======== STANDARD PARAMETERS ========###
+
+# Enter the magnetic declination for your location. If you don't
+# know it, see http://www.ngdc.noaa.gov/geomag-web/ (make sure to
+# convert the value to radians).
+magnetic_declination_radians: 0
+
+# On level ground, your IMU should read 0 for roll. If it doesn't,
+# enter the offset here (desired_value = offset + sensor_raw_value).
+roll_offset: 0
+
+# On level ground, your IMU should read 0 for pitch. If it doesn't,
+# enter the offset here (desired_value = offset + sensor_raw_value).
+pitch_offset: 0
+
+# Your IMU should read 0 for yaw at *magnetic* north. If it doesn't,
+# enter the offset here (desired_value = offset + sensor_raw_value).
+yaw_offset: 0
+
+# If this is true, the altitude is set to 0 in the output odometry message
+zero_altitude: true
+
+# If this is true, the transform world_frame->utm transform is broadcast
+# for use by other nodes
+broadcast_utm_transform: false

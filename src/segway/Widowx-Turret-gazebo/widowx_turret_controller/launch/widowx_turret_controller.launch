@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+  <node name="arbotix" pkg="arbotix_python" type="arbotix_driver" output="screen">
+    <rosparam file="$(find widowx_turret_controller)/config/servos.yaml" command="load" />
+  </node>
+</launch>

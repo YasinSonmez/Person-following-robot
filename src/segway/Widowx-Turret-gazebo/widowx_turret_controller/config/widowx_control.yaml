@@ -1,0 +1,14 @@
+pan_controller:
+    type: effort_controllers/JointPositionController
+    joint: servo_pan_joint
+    pid: {p: 30, i: 5, d: 20}
+
+tilt_controller:
+    type: effort_controllers/JointPositionController
+    joint: servo_tilt_joint
+    pid: {p: 20, i: 5, d: 10}
+
+# Publish all joint states -----------------------------------
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50  

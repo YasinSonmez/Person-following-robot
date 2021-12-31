@@ -1,0 +1,9 @@
+Header header
+float32[] aux_soc
+float32[] aux_voltage_V
+float32[] aux_current_A
+float32[] aux_temp_degC
+uint32[] aux_sys_status
+uint32[] aux_bcu_status
+uint32[] aux_bcu_faults
+float32 startup_7p2v_batt_voltage_V

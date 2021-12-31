@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Load the URDF into the ROS Parameter Server -->
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find widowx_turret_description)/robots/widowx_turret.urdf.xacro'"/>
+
+</launch>

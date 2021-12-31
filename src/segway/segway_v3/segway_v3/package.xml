@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package>
+  <name>segway_v3</name>
+  <version>0.0.1</version>
+  <description>
+    Metapackage containing ROS drivers and nodes for Segway RMP V3.
+  </description>
+  <maintainer email="rmp@stanleyinnovation.com">Patrick Hussey</maintainer>
+  <url type="website">http://ros.org/wiki/segway_rmp_v3</url>
+
+  <license>BSD</license>
+
+  <url type="repository">https://github.com/stanley_innovation/segway_v3_desktop</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>segway_description</run_depend>
+  <run_depend>segway_msgs</run_depend>
+  <run_depend>segway_navigation</run_depend>
+  <run_depend>segway_ros</run_depend>
+  <run_depend>segway_v3_config</run_depend>
+  <run_depend>si_utils</run_depend>
+
+  <export>
+    <architecture_independent/>
+    <metapackage/>
+  </export>
+</package>

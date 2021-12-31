@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package>
+  <name>third_party_sensors</name>
+  <version>0.0.1</version>
+  <description>Provides specific drivers that the Segway V3 uses from third parties not released in ROS</description>
+  <maintainer email="rmp@stanleyinnovation.com">Patrick Hussey</maintainer>
+  <url type="website">http://ros.org/wiki/segway_rmp_v3</url>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>ublox_gps</run_depend>
+  <run_depend>ublox_msgs</run_depend>
+  <run_depend>ublox_serialization</run_depend>
+  <run_depend>velodyne</run_depend>
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- You can specify that this package is a metapackage here: -->
+    <metapackage/>
+  </export>
+</package>

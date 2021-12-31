@@ -1,0 +1,20 @@
+<package>
+    <name>segway_sensor_filters</name>
+    <version>0.0.1</version>
+    <description>Sensor filter metapackage for Segway RMP</description>
+
+    <maintainer email="RMP@stanleyinnovation.com">Stanley Innovation, Inc.</maintainer>
+    <license>BSD</license>
+    <url type="website">http://ros.org/wiki/segway_rmp_v3</url>
+    <author>Patrick Hussey</author>
+
+    <buildtool_depend>catkin</buildtool_depend>
+    <run_depend>segway_assisted_teleop</run_depend>
+    <run_depend>range_sensor_filters</run_depend>
+    <run_depend>but_velodyne_proc</run_depend>
+    <run_depend>cob_scan_unifier</run_depend>
+
+    <export>
+    <metapackage/>
+    </export>
+</package>

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package>
+  <name>widowx_turret_controller</name>
+  <version>0.0.1</version>
+  <description>The widowx_turret_controller package</description>
+
+  <author email="jmrapado@robotnik.es">Jose Rapado</author>
+
+  <maintainer email="jmrapado@robotnik.es">Jose Rapado</maintainer>
+  <maintainer email="rnavarro@robotnik.es">Román Navarro</maintainer>
+
+  <license>BSD</license>
+
+  <url type="website">http://ros.org/wiki/widowx_turret</url>
+  <url type="repository">https://github.com/RobotnikAutomation/widowx_turret.git</url>
+  <url type="bugtracker">https://github.com/RobotnikAutomation/widowx_turret/issues</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>arbotix_python</build_depend>
+  <run_depend>arbotix_python</run_depend>
+
+
+
+  <export>
+  </export>
+</package>

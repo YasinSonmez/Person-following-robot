@@ -1,0 +1,40 @@
+<!-- Launch file for Segway platform startup -->
+
+<launch>
+    <arg name="use_joystick" value="false"/>
+
+	<!-- Segway System Watchdog is necessary for onboard PC -->
+	<node pkg="segway_ros" type="segway_wd" name="segway_wd" respawn="true" if="$(optenv SEGWAY_POWERS_PC_ONBOARD false)"/>
+	        
+    <!-- Segway Base platform ROS Driver -->
+    <node pkg="segway_ros" ns="segway" type="segway_driver" name="segway_driver" respawn="true" output="screen">
+        <param name="platform" value="$(optenv SEGWAY_BASE_PLATFORM false)" />
+    </node>
+
+    <!-- Platform specific robot state publisher and parameters -->
+    <include file="$(find segway_description)/launch/description.launch"/>
+    
+    <!-- Platform specific configuration -->
+    <node name="dynamic_reconfigure_load" pkg="dynamic_reconfigure" type="dynparam"
+        args="load /segway/segway_driver $(find segway_ros)/launch/config/$(optenv SEGWAY_PLATFORM_NAME RMP210)/segway_params.yaml" />
+        
+    <group if="$(arg use_joystick)">
+        <node pkg="joy" type="joy_node" name="joy_node" if="$(optenv SEGWAY_HAS_ONBOARD_JOY false)">
+            <param name="dev" type="string" value="$(optenv SEGWAY_JOY_DEV /dev/input/js0)" />
+            <param name="deadzone" type="double" value="$(optenv SEGWAY_JOY_DEADZONE 0.1)" />
+            <param name="autorepeat_rate" type="double" value="50" />
+        </node>
+        
+        <node pkg="segway_ros" ns="segway" type="segway_teleop" name="segway_teleop" output="screen">
+            <rosparam file="$(find segway_bringup)/launch/teleop/config/$(optenv SEGWAY_JOY_MAPPING xbox360).yaml" command="load"/>
+        </node>
+        
+        <group ns="segway">
+            <node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager"/>
+            <node pkg="nodelet" type="nodelet" name="cmd_vel_mux" args="load yocs_cmd_vel_mux/CmdVelMuxNodelet nodelet_manager">
+                <param name="yaml_cfg_file" value="$(find segway_bringup)/launch/teleop/config/cmd_vel_mux.yaml"/>
+            </node>
+        </group>
+    </group>
+    
+</launch>

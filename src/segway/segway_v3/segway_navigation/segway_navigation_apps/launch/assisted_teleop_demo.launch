@@ -1,0 +1,30 @@
+<!-- Assisted teleop demo -->
+
+<launch>
+    <arg name="robot_name" default="$(optenv SEGWAY_PLATFORM_NAME RMP210)"/>
+    <arg name="use_3d" default="$(optenv SEGWAY_USE_VOXEL_GRID false)"/>
+    
+    <node pkg="segway_assisted_teleop" name="segway_assisted_teleop" type="segway_assisted_teleop" clear_params="true" respawn="false">
+    
+        <param name="controller_frequency" value="10.0"/>
+        <param name="num_th_samples" value="20"/>
+        <param name="num_x_samples" value="6" />
+        <param name="diff_drive" value="$(optenv SEGWAY_IS_OMNI false)" />
+        <param name="theta_range" value="3.14" />
+        <param name="translational_collision_speed" value="0.0"/>
+        <param name="rotational_collision_speed" value="1.0" />
+        
+        <rosparam file="$(find segway_navigation_apps)/config/$(arg robot_name)/base_planner_params.yaml" command="load"/>
+        <rosparam file="$(find segway_navigation_apps)/config/$(arg robot_name)/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find segway_navigation_apps)/config/costmaps/2d/costmap_local.yaml" command="load" unless="$(arg use_3d)"/>
+        <rosparam file="$(find segway_navigation_apps)/config/costmaps/3d/costmap_local.yaml" command="load" if="$(arg use_3d)"/>
+        <remap from="teleop_cmd_vel" to="/segway/teleop/cmd_vel" />
+        <remap from="cmd_vel" to="/segway/assisted_teleop/cmd_vel" />
+    </node>
+    
+    <node pkg="costmap_2d" type="costmap_2d_markers" name="voxel_visualizer" if="$(arg use_3d)">
+        <remap from="voxel_grid" to="/segway_assisted_teleop/local_costmap/obstacles_voxel_grid/voxel_grid"/>
+    </node>
+    
+
+</launch>

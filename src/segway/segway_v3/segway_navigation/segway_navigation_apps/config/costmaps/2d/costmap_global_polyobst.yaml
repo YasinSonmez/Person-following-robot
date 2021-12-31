@@ -1,0 +1,16 @@
+global_costmap:
+    global_frame:       map
+    rolling_window:     false
+    static_map:         true
+    update_frequency:   0.5
+
+  track_unknown_space:       true
+
+  plugins:
+    - {name: gps_boundaries,       type: "vector_costmap_plugins::PolygonObstacleLayer"}
+    - {name: obstacles_costmap2d,  type: "costmap_2d::ObstacleLayer"}
+    - {name: inflation,            type: "costmap_2d::InflationLayer"}
+
+
+
+

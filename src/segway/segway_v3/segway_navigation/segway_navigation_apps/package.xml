@@ -1,0 +1,29 @@
+<package format="2">
+	<name>segway_navigation_apps</name>
+	<version>0.0.1</version>
+	<description>Autonomous mapping and navigation demos for Segway RMP V3 platforms</description>
+
+    <maintainer email="RMP@stanleyinnovation.com">Stanley Innovation, Inc.</maintainer>
+    <license>BSD</license>
+    <url type="website">http://ros.org/wiki/segway_rmp_v3</url>
+    <author>Patrick Hussey</author>
+
+    <buildtool_depend>catkin</buildtool_depend>
+	
+    <test_depend>roslaunch</test_depend>
+	
+    <exec_depend>amcl</exec_depend>
+    <exec_depend>base_local_planner</exec_depend>
+    <exec_depend>costmap_2d</exec_depend>
+    <exec_depend>dwa_local_planner</exec_depend>
+    <exec_depend>frontier_exploration</exec_depend>
+    <exec_depend>gmapping</exec_depend>
+    <exec_depend>map_server</exec_depend>
+    <exec_depend>map_server</exec_depend>
+    <exec_depend>move_base</exec_depend>
+    <exec_depend>move_base</exec_depend>
+    <exec_depend>navfn</exec_depend>
+    <exec_depend>segway_assisted_teleop</exec_depend>
+    <exec_depend>segway_ros</exec_depend>
+    
+</package>

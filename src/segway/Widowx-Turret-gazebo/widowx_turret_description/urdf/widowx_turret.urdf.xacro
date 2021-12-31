@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+   <property name="M_SCALE" value="0.001"/>
+   <property name="M_PI" value="3.14159"/>
+   
+   <xacro:include filename="$(find widowx_turret_description)/urdf/common_materials.xacro" />
+
+   <!--link name="plate_top_link"/-->
+   <!--joint name="fixed" type="fixed">
+      <parent link="plate_top_link" />
+      <child link="ph_base_link" />
+   </joint-->
+
+   <xacro:macro name="widowx_turret" params="parent prefix *origin">
+
+      <!-- links -->
+      <link name="${prefix}turret_base_link">
+         <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+               <mesh filename="package://widowx_turret_description/meshes/turret_base.stl"/>
+            </geometry>
+            <xacro:material_black />
+	     </visual>
+         <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+               <mesh filename="package://widowx_turret_description/meshes/turret_base.stl"/>
+            </geometry>
+         </collision>
+         <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="1" />
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+         </inertial>
+      </link>
+      <link name="${prefix}servos_base_link">
+         <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+               <mesh filename="package://widowx_turret_description/meshes/servos_base.stl" />
+            </geometry>
+            <xacro:material_black />
+         </visual>
+         <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+               <mesh filename="package://widowx_turret_description/meshes/servos_base.stl"/>
+            </geometry>
+         </collision>
+         <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="1" />
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+         </inertial>
+      </link>
+      <link name="${prefix}servo_pan_link">
+         <visual>
+			      <origin xyz="0 0 0" rpy="0 0 0" />
+            <!--origin xyz="0 0 0" rpy="0 0 0" /-->
+            <geometry>
+               <mesh filename="package://widowx_turret_description/meshes/MX_28T.stl" />
+            </geometry>
+            <xacro:material_black />
+         </visual>
+         <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+               <mesh filename="package://widowx_turret_description/meshes/MX_28T.stl" />
+            </geometry>
+         </collision>
+         <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="1" />
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+         </inertial>
+      </link>
+      <link name="${prefix}servo_horn_link">
+         <visual>
+			<origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
+			<!--origin xyz="0 0 0" rpy="0 0 0" /-->
+            <geometry>
+               <mesh filename="package://widowx_turret_description/meshes/servo_horn.stl"/>
+            </geometry>
+           <xacro:material_black />
+         </visual>
+         <collision>
+            <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
+            <geometry>
+               <mesh filename="package://widowx_turret_description/meshes/servo_horn.stl"/>
+            </geometry>
+         </collision>
+         <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="1" />
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+         </inertial>
+      </link>
+      <link name="${prefix}side_link">
+         <visual>
+            <origin xyz="0 0 0" rpy="${M_PI/2} 0 ${M_PI/2}" />
+            <geometry>
+               <mesh filename="package://widowx_turret_description/meshes/side.stl"/>
+            </geometry>
+            <xacro:material_black />
+         </visual>
+         <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+               <mesh filename="package://widowx_turret_description/meshes/side.stl"/>
+            </geometry>
+         </collision>
+         <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="1" />
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+         </inertial>
+      </link>
+      <link name="${prefix}servo_tilt_link">
+         <visual>
+            <origin xyz="0 0 ${0.001*41.6}" rpy="${M_PI/2} 0 ${M_PI/2}" />
+            <geometry>
+               <mesh filename="package://widowx_turret_description/meshes/MX_28T.stl"/>
+            </geometry>
+            <xacro:material_black />
+         </visual>
+         <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+               <mesh filename="package://widowx_turret_description/meshes/MX_28T.stl"/>
+            </geometry>
+         </collision>
+         <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="1" />
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+         </inertial>
+      </link>
+      <link name="${prefix}hinge_link">
+         <visual>
+            <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
+            <geometry>
+               <mesh filename="package://widowx_turret_description/meshes/hinge.stl"/>
+            </geometry>
+            <xacro:material_black />
+         </visual>
+         <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+               <mesh filename="package://widowx_turret_description/meshes/hinge.stl"/>
+            </geometry>
+         </collision>
+         <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="1" />
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+         </inertial>
+      </link>
+      <link name="${prefix}top_plate_link">
+         <visual>
+            <origin xyz="0 0 0" rpy="0 0 1.57" />
+            <geometry>
+               <mesh filename="package://widowx_turret_description/meshes/top_plate.stl"/>
+            </geometry>
+            <xacro:material_black />
+         </visual>
+         <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+               <mesh filename="package://widowx_turret_description/meshes/top_plate.stl"/>
+            </geometry>
+         </collision>
+         <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="1" />
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+         </inertial>
+      </link>
+      <!-- joints -->
+      <joint name="${prefix}turret_base_joint" type="fixed">
+         <insert_block name="origin" />
+         <parent link="${parent}" />
+         <child link="${prefix}turret_base_link"/>
+         <dynamics damping="0.0" friction="0.0"/>
+         
+      </joint>
+      <joint name="${prefix}servos_base_joint" type="fixed">
+         <origin xyz="0 0 ${0.001*51}" rpy="0 0 0" />
+         <parent link="${prefix}turret_base_link" />
+         <child link="${prefix}servos_base_link" />
+         <axis xyz="0 0 1" />
+         <limit lower="-2.617" upper="2.617" effort="0" velocity="0.785" />
+         <dynamics damping="0.0" friction="0.0"/>
+         
+      </joint>
+      <joint name="${prefix}joint_2" type="fixed">
+         <!--origin xyz="0.04825 0 0.14203" rpy="0 0 0" /-->
+         <origin xyz="0 ${0.001*10.8} ${0.001*15.25}" rpy="0 0 0" />
+         <parent link="${prefix}servos_base_link" />
+         <child link="${prefix}servo_pan_link" />
+         <axis xyz="0 1 0" />
+         <limit lower="-1.575" upper="1.575" effort="0" velocity="1.571" />
+         <dynamics damping="0.0" friction="0.0"/>
+         
+      </joint>
+      
+      <joint name="${prefix}servo_horn_joint" type="fixed">
+         <origin xyz="0 0 ${0.001*18.25}" rpy="0 0 0" />
+         <parent link="${prefix}servo_pan_link" />
+         <child link="${prefix}servo_horn_link" />
+         <axis xyz="0 1 0" />
+         <limit lower="0" upper="2.617" effort="0" velocity="1.571" />
+         <dynamics damping="0.0" friction="0.0"/>
+         
+      </joint>
+      <joint name="${prefix}joint_4" type="fixed">
+         <origin xyz="0 0 0" rpy="0 0 0" />
+         <parent link="${prefix}servo_horn_link" />
+         <child link="${prefix}side_link" />
+         <axis xyz="0 1 0" />
+         <limit lower="-1.745" upper="1.745" effort="0" velocity="1.571" />
+         <dynamics damping="0.0" friction="0.0"/>
+         
+      </joint>
+      <joint name="${prefix}servo_pan_joint" type="revolute">
+         <origin xyz="0 0 0" rpy="0 0 0" />
+         <parent link="${prefix}side_link" />
+         <child link="${prefix}servo_tilt_link" />
+         <axis xyz="0 0 1" />
+         <limit lower="-${M_PI}" upper="${M_PI}" effort="5" velocity="1.571" />
+         <dynamics damping="0.0" friction="0.0"/>
+         
+      </joint>
+      <joint name="${prefix}servo_tilt_joint" type="revolute">
+         <origin xyz = "0 0 ${0.001*50.25}" rpy="0 0 0" />
+         <parent link="${prefix}servo_tilt_link" />
+         <child link="${prefix}hinge_link" />
+         <axis xyz="1 0 0" />
+         <limit lower="-${M_PI/2}" upper="${M_PI/2}" effort="5" velocity="0.5" />
+         <dynamics damping="0.0" friction="0.0"/>
+         
+      </joint>
+      <joint name="${prefix}joint_7" type="fixed">
+         <origin xyz = "0 0 ${0.001*29.8}" rpy="0 0 0" />
+         <parent link="${prefix}hinge_link" />
+         <child link="${prefix}top_plate_link" />
+         <axis xyz="0 0 1" />
+         <limit lower="-0.31" upper="0.1" effort="0" velocity="0.5" />
+         <dynamics damping="0.0" friction="0.0"/>
+      </joint>
+   
+      <transmission name="tran1">
+         <type>transmission_interface/SimpleTransmission</type>
+         <joint name="servo_tilt_joint">
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+            </joint>
+         <actuator name="motor1">
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+         </actuator>
+      </transmission>
+
+      <transmission name="tran2">
+         <type>transmission_interface/SimpleTransmission</type>
+         <joint name="servo_pan_joint">
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+            </joint>
+         <actuator name="motor2">
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+         </actuator>
+      </transmission>
+
+   </xacro:macro>
+
+
+
+
+</robot>

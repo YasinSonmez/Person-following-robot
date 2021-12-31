@@ -1,0 +1,55 @@
+<launch>
+<arg name="x_pos" default="-19.5"/>
+<arg name="y_pos" default="3.0"/>
+<arg name="z_pos" default="0.0"/>
+<arg name="yaw" default="0"/>
+<arg name="robot_name" default="$(optenv SEGWAY_PLATFORM_NAME RMP_210)"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/dwa.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>  
+
+  
+
+ <!-- <node pkg="project" type="moving_obstacle_test.py" name="moving_obstacle_test"/> -->
+
+  <!-- Load the Robot Description-->
+    <include file="$(find segway_description)/launch/description.launch"/>
+
+
+  <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+  <node name="spawn_segway_model" pkg="gazebo_ros" type="spawn_model"
+    args="-urdf -model segway_robot -param robot_description -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -Y $(arg yaw)"/>
+  <!--  <node pkg="widowx_turret_controller" name="pt_cmd" type="pt_cmd"/> -->
+<rosparam file="$(find widowx_turret_controller)/config/widowx_control.yaml" command="load"/> 
+    <!-- load the controllers -->
+  <node name="controller_spawner_pt" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" args="pan_controller tilt_controller"/>
+    
+  <node name="robot_state_publisher_pt" pkg="robot_state_publisher" type="robot_state_publisher"/>
+    <!-- Launch Segway sim ros_control -->
+    <include file="$(find segway_sim_control)/launch/$(arg robot_name)_control.launch"/>
+			
+
+ <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan" >
+            <remap from="cloud_in" to="/velodyne_points"/>
+            <param name="min_height" value="0.15" />
+            <param name="max_height" value="1.7" />
+            <param name="angle_min" value="-3.1416" /> <!-- -pi -->
+            <param name="angle_max" value="3.1416" /> <!-- pi -->
+            <param name="scan_time" value="0.1" />
+            <param name="range_max" value="10.0" />
+            <param name="range_min" value="0.45" />
+            <param name="use_inf" value="false" />
+	    <param name="angle_increment" value="0.00613" />	
+            <param name="target_frame" value="base_link" />
+
+
+        </node>
+
+</launch>

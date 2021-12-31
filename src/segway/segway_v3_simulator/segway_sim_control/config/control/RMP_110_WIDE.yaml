@@ -1,0 +1,63 @@
+joint_state_controller:
+    type: "joint_state_controller/JointStateController"
+    publish_rate: 50
+
+front_caster_swivel_controller:
+    type: "effort_controllers/JointPositionController"
+    joint: front_caster_swivel
+    pid: {p: 1.0, i: 0.001, d: 0.0}
+    
+rear_caster_swivel_controller:
+    type: "effort_controllers/JointPositionController"
+    joint: rear_caster_swivel
+    pid: {p: 1.0, i: 0.001, d: 10.0}
+    
+rear_caster_wheel_controller:
+    type: "effort_controllers/JointVelocityController"
+    joint: rear_caster_wheel
+    pid: {p: 1.0, i: 0.001, d: 0.0}
+
+front_caster_wheel_controller:
+    type: "effort_controllers/JointVelocityController"
+    joint: front_caster_wheel
+    pid: {p: 1.0, i: 0.001, d: 0.0}
+    
+    
+
+diff_vel_controller:
+    type: "diff_drive_controller/DiffDriveController"
+    left_wheel: 'left_wheel'
+    right_wheel: 'right_wheel'
+    publish_rate: 100
+    pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
+    twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
+    cmd_vel_timeout: 0.25
+
+    # Base frame_id
+    base_frame_id: /segway/base_link
+
+    # Odometry fused with IMU is published by robot_localization, so
+    # no need to publish a TF based on encoders alone.
+    enable_odom_tf: false
+
+    # Segway hardware provides wheel velocities
+    estimate_velocity_from_position: false
+
+    # Wheel separation and radius multipliers
+    wheel_separation_multiplier: 1.0 # default: 1.0
+    wheel_radius_multiplier    : 1.0 # default: 1.0
+
+    # Velocity and acceleration limits
+    # Whenever a min_* is unspecified, default to -max_*
+    linear:
+        x:
+            has_velocity_limits    : true
+            max_velocity           : 3.57632 # m/s
+            has_acceleration_limits: true
+            max_acceleration       : 4.903325   # m/s^2
+    angular:
+        z:
+            has_velocity_limits    : true
+            max_velocity           : 3.0   # rad/s
+            has_acceleration_limits: true
+            max_acceleration       : 28.8   # rad/s^2

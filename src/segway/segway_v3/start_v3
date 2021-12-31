@@ -1,0 +1,124 @@
+#!/bin/bash
+
+S1USERNAME="sibot"
+S1PASS="pswd"
+S1NAME="sibot1"
+S1BASE="cd /home/sibot/segway_ws ; source ./devel/setup.bash ; "
+LOCALMAPDEST="/home/sibot/segway_ws/src/segway_v3/segway_navigation/segway_navigation_apps/maps/"
+
+MONBASE="pwd ; cd /home/si/segway_remote_ws ; source ./devel/setup.bash ; echo $ROS_MASTER_URI ; "
+MONJOYSTART="roslaunch segway_remote_teleop segway_remote_teleop.launch dev:="
+MONJOY="/dev/input/js2"
+
+#Here we are going to do some checks to try and ensure sucess
+#We need to be in a graphical shell to open multiple terminals
+if [ -z "$XAUTHORITY" ]
+then 
+ echo "Failed to launch terminal emulator! This is not a graphical session."
+ exit 1
+fi
+
+#No command given
+if [ -z "$1" ]
+then
+ echo $"Usage: $0 {test|reboot|mapping|map_nav|mapless_nav|assisted_teleop}"
+ exit 1
+fi
+
+
+if [ ! -z "$1" ]
+then
+    case "$1" in
+            test)
+	        #Lets test to ensure we can communicate with the platform
+	        echo "=====================Testing Communication==================="
+	        echo "Testing Communication with the base..."
+	        echo "Using username->$S1USERNAME"
+	        echo "Using computername->$S1NAME"
+	        MYIP=$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')
+	        echo "This computer's IP is->$MYIP"
+	        COMCHK=$(ssh -o BatchMode=yes -o ConnectTimeout=5 $S1USERNAME@$S1NAME echo ok 2>&1)
+	        echo "SSH to platform...[$COMCHK]"
+	        echo ""
+                exit 1
+	        ;;
+            reboot)
+	        echo "=====================Rebooting the platform================="
+                echo "Logging into the platform and sending this command-->segstop"
+                COMSTOP=$(ssh -o ConnectTimeout=5 $S1USERNAME@$S1NAME "sudo /sbin/stop segway-core" )  
+		sleep 2
+                echo "$COMSTOP"
+                COMSTART=$(ssh -o ConnectTimeout=5 $S1USERNAME@$S1NAME "sudo /sbin/start segway-core" )
+		echo "$COMSTART"
+		sleep 16
+		echo "You should hear --> beep-beep"
+		sleep 5
+		echo "You should hear --> beep-beep"
+		exit 1
+	        ;;
+            mapping)
+	        echo "=====================Starting the Map builder==============="
+                S1CMD="roslaunch segway_navigation_apps gmapping_demo.launch"
+                MONCMD="roslaunch segway_viz view_robot.launch function:=mapping"
+		
+		x-terminal-emulator -e ssh sibot@sibot1 -t $S1BASE$S1CMD
+		sleep 5
+		x-terminal-emulator -e bash -c "$MONBASE$MONCMD"
+		x-terminal-emulator -e bash -c "$MONBASE$MONJOYSTART$MONJOY"
+
+		echo "When you are ready to save the map enter a name and press [ENTER]:"
+		read map_name
+		MAPSAVE=$(ssh -o ConnectTimeout=5 $S1USERNAME@$S1NAME $S1BASE"rosrun map_server map_saver -f $LOCALMAPDEST$map_name" )
+		echo "$MAPSAVE"
+                ;;
+            map_nav)
+	        echo "=====================Navigating with a pre-built map========"
+                if [ ! -z "$2" ]
+                then
+                    MAPFILE=$2
+                else
+                    echo "You have to specify a map file for Global Navigation...exiting"
+		    echo "Text time try one of these maps or build a new one:"
+		    MAPSAVE=$(ssh -o ConnectTimeout=5 $S1USERNAME@$S1NAME $S1BASE"cd $LOCALMAPDEST ; ls *.yaml | grep -Po '.*(?=\.yaml)'" )
+		    echo $MAPSAVE
+		    echo ""
+                    exit 1
+                fi
+                
+                S1CMD="roslaunch segway_navigation_apps 2d_map_nav_demo.launch map_file:=$MAPFILE"
+                MONCMD="roslaunch segway_viz view_robot.launch function:=map_nav"
+		
+		x-terminal-emulator -e ssh sibot@sibot1 -t $S1BASE$S1CMD
+		sleep 5
+		x-terminal-emulator -e bash -c "$MONBASE$MONCMD"
+		x-terminal-emulator -e bash -c "$MONBASE$MONJOYSTART$MONJOY"
+                ;;
+            mapless_nav)
+	        echo "======================Mapless Navigation===================="
+                S1CMD="roslaunch segway_navigation_apps 2d_mapless_nav_demo.launch"
+                MONCMD="roslaunch segway_viz view_robot.launch function:=mapless_nav"
+		
+		x-terminal-emulator -e ssh sibot@sibot1 -t $S1BASE$S1CMD
+		sleep 5
+		x-terminal-emulator -e bash -c "$MONBASE$MONCMD"
+		x-terminal-emulator -e bash -c "$MONBASE$MONJOYSTART$MONJOY"
+                ;;
+	    assisted_teleop)
+	        echo "======================Assisted Teleop======================"
+                S1CMD="roslaunch segway_navigation_apps assisted_teleop_demo.launch"
+                MONCMD="roslaunch segway_viz view_robot.launch function:=assisted_teleop"
+
+		x-terminal-emulator -e ssh sibot@sibot1 -t $S1BASE$S1CMD
+		sleep 5
+		x-terminal-emulator -e bash -c "$MONBASE$MONCMD"
+		x-terminal-emulator -e bash -c "$MONBASE$MONJOYSTART$MONJOY"
+
+                ;;
+	    *)
+                echo $"Usage: $0 {test|reboot|mapping|map_nav|mapless_nav|assisted_teleop}\n"
+                exit 1
+    esac
+fi
+
+
+

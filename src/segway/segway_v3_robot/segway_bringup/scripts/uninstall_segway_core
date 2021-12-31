@@ -1,0 +1,11 @@
+#!/usr/bin/env python
+import segway_upstart
+import os
+
+j = segway_upstart.Job(name="segway-core", user='root', interface=os.environ.get('ROBOT_NETWORK'), master_uri=os.environ.get('ROS_MASTER_URI'))
+        
+# Stuff to launch on system startup.
+j.add(package="segway_bringup", filename="launch/stanley_innovation_system.launch")
+
+j.uninstall()
+

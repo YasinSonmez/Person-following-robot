@@ -1,0 +1,64 @@
+# http://wiki.ros.org/navfn
+GlobalPlanner:
+  lethal_cost:                  253   #default: 253
+  neutral_cost:                 50    #default: 50
+  orientation_mode:             1     #default: 1-Forward
+  publish_potential:            false #default: false
+
+DWAPlannerROS:
+  # Robot Configuration Parameters
+  acc_lim_x:                    2.5     #default 2.5    
+  acc_lim_y:                    2.5     #default 2.5
+  acc_lim_th:                   3.2     #default 3.2
+  max_trans_vel:                0.5     #default 0.55
+  min_trans_vel:                0.1    #default 0.1
+  max_vel_x:                    0.5     #default 0.55
+  min_vel_x:                    -0.5     #default 0.0
+  max_vel_y:                    0.5     #default 0.1
+  min_vel_y:                   -0.5     #default -0.1
+  max_rot_vel:                  0.5     #default 1.0
+  min_rot_vel:                  0.4    #default 0.4
+  rot_stopped_vel:              0.01
+  trans_stopped_vel:            0.01
+
+  # Goal Tolerance Parameters
+  yaw_goal_tolerance:           0.17    #default 0.05
+  xy_goal_tolerance:            0.5     #default 0.1
+  latch_xy_goal_tolerance:      true    #default false
+
+  # Forward Simulation Parameters
+  sim_time:                     1.7     #default 1.7
+  sim_granularity:              0.017   #default 0.025
+  angular_sim_granularity:      0.017   #default 0.025
+  sim_period:                   0.1
+  vx_samples:                   3       #default 3
+  vy_samples:                   10       #default 3
+  vtheta_samples:               20      #default 10
+  controller_frequency:         10.0    #default 20.0
+  penalize_negative_x:          false    #default true Note should have a rearward laser scanner to set this to false
+
+  # Trajectory scoring parameters
+  # The weighting for how much the controller should stay close to the path it was given
+  path_distance_bias:             55.0    #default 32.0
+  # The weighting for how much the controller should attempt to reach its local goal, also controls speed
+  goal_distance_bias:             28.0    #default 24.0
+  # The weighting for how much the controller should attempt to avoid obstacles
+  occdist_scale:                  0.01     #default 0.01
+  # The distance from the center point of the robot to place an additional scoring point, in meters
+  forward_point_distance:         0.00     #default 0.325
+  # The amount of time that the robot must stThe absolute value of the veolicty at which to start scaling the robot's footprint,
+  # in m/sop before a collision in order for a trajectory to be considered valid in seconds
+  stop_time_buffer:               0.2     #default 0.2
+  # The absolute value of the veolicty at which to start scaling the robot's footprint, in m/s
+  scaling_speed:                  0.25    #default 0.25
+  # The maximum factor to scale the robot's footprint by
+  max_scaling_factor:             0.2     #default 0.2
+
+  # Oscillation Prevention Parameters
+  # How far the robot must travel in meters before oscillation flags are reset
+  oscillation_reset_dist:       0.05    #default 0.05
+
+  # Global Plan Parameters
+  prune_plan:                   true    #default true
+
+

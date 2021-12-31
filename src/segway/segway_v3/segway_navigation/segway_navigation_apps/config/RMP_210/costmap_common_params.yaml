@@ -1,0 +1,62 @@
+# 2D Costmap parameters
+# http://www.ros.org/wiki/costmap_2d
+
+### Coordinate frame and tf parameters ###
+robot_base_frame:           segway/base_link
+transform_tolerance:        0.6
+
+# ---RMP210 footprint (Meters):---
+footprint: [[0.46, 0.0], [0.459, 0.024], [0.457, 0.048], [0.454, 0.072], [0.45, 0.096], [0.444, 0.119], [0.437, 0.142], [0.429, 0.165], [0.42, 0.187], [0.41, 0.209], [0.398, 0.23], [0.386, 0.251], [0.372, 0.27], [0.357, 0.289], [0.342, 0.308], [0.325, 0.325], [-0.325, 0.325], [-0.342, 0.308], [-0.357, 0.289], [-0.372, 0.27], [-0.386, 0.251], [-0.398, 0.23], [-0.41, 0.209], [-0.42, 0.187], [-0.429, 0.165], [-0.437, 0.142], [-0.444, 0.119], [-0.45, 0.096], [-0.454, 0.072], [-0.457, 0.048], [-0.459, 0.024], [-0.46, 0.0], [-0.459, -0.024], [-0.457, -0.048], [-0.454, -0.072], [-0.45, -0.096], [-0.444, -0.119], [-0.437, -0.142], [-0.429, -0.165], [-0.42, -0.187], [-0.41, -0.209], [-0.398, -0.23], [-0.386, -0.251], [-0.372, -0.27], [-0.357, -0.289], [-0.342, -0.308], [-0.325, -0.325], [0.325, -0.325], [0.342, -0.308], [0.357, -0.289], [0.372, -0.27], [0.386, -0.251], [0.398, -0.23], [0.41, -0.209], [0.42, -0.187], [0.429, -0.165], [0.437, -0.142], [0.444, -0.119], [0.45, -0.096], [0.454, -0.072], [0.457, -0.048], [0.459, -0.024], [0.46, 0.0]]
+footprint_padding: 0.01
+
+# The following parameter is overwritten if the "footprint" parameter is set
+#robot_radius:               0.55
+
+### Costmap layer definitions ###
+publish_frequency:           1.0
+plugins:                     []
+
+static:
+  unknown_cost_value:        -1
+  lethal_cost_threshold:     100
+  map_topic:                 map
+  subscribe_to_updates:      true
+
+obstacles_costmap2d:
+  observation_sources: segway_scan
+  segway_scan: {topic:                   segway/filtered_scan,
+                data_type:               LaserScan,
+                expected_update_rate:    0.5,
+                observation_persistence: 0.0,
+                marking:                 true,
+                clearing:                true,
+                inf_is_valid:            true,
+                min_obstacle_height:     0.0,
+                max_obstacle_height:     2.0,
+                obstacle_range:          2.5,
+                raytrace_range:          3.0}
+
+obstacles_voxel_grid:
+  origin_z:              0.0
+  z_resolution:          0.2
+  z_voxels:              10
+  unknown_threshold:     10
+  mark_threshold:        0
+  publish_voxel_map:     false
+  observation_sources: segway_point_cloud
+  segway_point_cloud: {topic:                   segway/filtered_points2,
+                       data_type:               PointCloud2,
+                       expected_update_rate:    0.5,
+                       observation_persistence: 0.0,
+                       marking:                 true,
+                       clearing:                true,
+                       inf_is_valid:            false,
+                       min_obstacle_height:     0.0,
+                       max_obstacle_height:     2.0,
+                       obstacle_range:          2.5,
+                       raytrace_range:          3.0}
+
+inflation:
+  inflation_radius:           3.0  #default 0.5
+  cost_scaling_factor:        12.0 #default 10.0
+

@@ -1,0 +1,36 @@
+<package>
+    <name>segway_ros</name>
+    <version>0.0.1</version>
+    <description>Drivers and nodes related to Segway RMP</description>
+    
+    <maintainer email="RMP@stanleyinnovation.com">Stanley Innovation, Inc.</maintainer>
+    <license>BSD</license>
+    <url type="website">http://ros.org/wiki/segway_rmp_v3</url>
+    <author>Patrick Hussey</author>
+
+    <buildtool_depend>catkin</buildtool_depend>
+
+    <!-- Packages needed to build and run-->
+    <build_depend>dynamic_reconfigure</build_depend>
+    <run_depend>dynamic_reconfigure</run_depend>
+    
+    <!-- Packages needed to run but not to build-->
+    <run_depend>segway_msgs</run_depend>
+    <run_depend>segway_description</run_depend>
+    <run_depend>joy</run_depend>
+    <run_depend>yocs_cmd_vel_mux</run_depend>   
+    <run_depend>rospy</run_depend>
+    <run_depend>tf</run_depend>
+    <run_depend>move_base</run_depend>
+    <run_depend>actionlib</run_depend>
+    <run_depend>geometry_msgs</run_depend>
+    <run_depend>sensor_msgs</run_depend>
+    <run_depend>actionlib_msgs</run_depend>
+    <run_depend>move_base_msgs</run_depend>
+    <run_depend>interactive_markers</run_depend>
+    <run_depend>visualization_msgs</run_depend>
+
+    
+	<export>
+	</export>
+</package>

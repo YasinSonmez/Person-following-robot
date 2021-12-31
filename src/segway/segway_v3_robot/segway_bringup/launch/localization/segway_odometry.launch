@@ -1,0 +1,57 @@
+<!-- Launch file for Segway localization startup -->
+
+<launch>
+    <arg name="run_navsat_transform" default="$(optenv SEGWAY_USE_GPS false)"/>
+    <arg name="use_platform_odometry" default="$(optenv SEGWAY_USE_PLATFORM_ODOMETRY false)"/> 
+
+    <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform_node" respawn="true" if="$(arg run_navsat_transform)">
+        <rosparam command="load" 
+            file="$(find segway_bringup)/launch/localization/config/navsat_transform_params.yaml"/>
+
+        <remap from="/imu/data" to="/segway/feedback/ext_imu" if="$(optenv SEGWAY_HAS_EXT_IMU false)"/>
+        <remap from="/odometry/filtered" to="/segway/odometry/local_filtered" if="$(optenv SEGWAY_USE_GPS_FOR_LOCAL_ODOM false)" />
+        <remap from="/odometry/filtered" to="/segway/odometry/global_filtered" if="$(optenv SEGWAY_USE_GPS_FOR_GLOBAL_LOCALIZATION false)" />
+        <remap from="/gps/fix" to="/segway/feedback/gps/fix" if="$(env SEGWAY_HAS_GPS)"/>
+        <remap from="/odometry/gps" to="/segway/odometry/gps"/>
+    </node>
+    
+    <group unless="$(arg use_platform_odometry)">
+    <!-- This node will take in measurements from odometry, IMU, stamped pose, and stamped twist messages. It tracks
+         the state of the robot, with the state vector being defined as X position, Y position, Z position,
+         roll, pitch, yaw, their respective velocites, and linear acceleration. Units for all measurements are assumed
+         to conform to the SI standard as specified in REP-103. -->
+        <node pkg="robot_localization" type="ekf_localization_node" name="ekf_local_localization" clear_params="true">
+            <rosparam command="load" 
+                file="$(find segway_bringup)/launch/localization/config/common_localization_params.yaml"/>
+            <rosparam command="load" 
+                file="$(find segway_bringup)/launch/localization/config/base_platform_localization_params.yaml" unless="$(optenv SEGWAY_USE_GPS_FOR_LOCAL_ODOM false)"/>
+            <rosparam command="load" 
+                file="$(find segway_bringup)/launch/localization/config/gps_localization_params.yaml" if="$(optenv SEGWAY_USE_GPS_FOR_LOCAL_ODOM false)"/>
+                
+            <param name="two_d_mode" value="true" if="$(optenv SEGWAY_USE_2D_ODOMETRY true)"/>
+                
+            <!-- Need to remap the published estimate to something more meaningful -->
+            <remap from="/odometry/filtered" to="/odom"/>    
+        </node>
+        
+        <!-- Second instance is used if GPS is being fused with the local estimate to create a global estimate in the map frame -->
+        <node pkg="robot_localization" type="ekf_localization_node" name="ekf_global_localization" clear_params="true" if="$(optenv SEGWAY_USE_GPS_FOR_GLOBAL_LOCALIZATION false)">
+            <rosparam command="load" 
+                file="$(find segway_bringup)/launch/localization/config/common_localization_params.yaml"/>
+            <rosparam command="load" 
+                file="$(find segway_bringup)/launch/localization/config/global_gps_localization_params.yaml"/>
+                
+            <!--Increase the sensor timeout and the update rate to account for slow data-->
+            <param name="sensor_timeout" value="1.0" />
+            <param name="frequency" value="10.0" />
+            
+            <!-- Need to set the global frame to the map frame and remap the published estimate to something more meaningful -->
+            <param name="world_frame" value="map" />
+            
+            <param name="two_d_mode" value="true" if="$(optenv SEGWAY_USE_2D_ODOMETRY true)"/>
+            
+            <remap from="/odometry/filtered" to="/segway/odometry/global_filtered" />  
+        </node>
+    </group>
+
+</launch>

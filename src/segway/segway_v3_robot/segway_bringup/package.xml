@@ -1,0 +1,32 @@
+<package>
+    <name>segway_bringup</name>
+    <version>0.0.1</version>
+    <description>System launch file and environment hooks for Segway RMP</description>
+    
+    <maintainer email="RMP@stanleyinnovation.com">Stanley Innovation, Inc.</maintainer>
+    <license>BSD</license>
+    <url type="website">http://ros.org/wiki/segway_rmp_v3</url>
+    <author>Patrick Hussey</author>
+
+    <buildtool_depend>catkin</buildtool_depend>
+    
+    <build_depend>roslaunch</build_depend>
+    <run_depend>laser_filters</run_depend>
+    <run_depend>joy</run_depend>
+    <run_depend>robot_localization</run_depend>
+    <run_depend>yocs_cmd_vel_mux</run_depend>
+    <run_depend>urg_node</run_depend>
+    <run_depend>ublox_gps</run_depend>
+    <run_depend>ublox_msgs</run_depend>
+    <run_depend>ublox_serialization</run_depend>
+    <run_depend>segway_ros</run_depend>
+    <run_depend>segway_upstart</run_depend>
+    <run_depend>but_velodyne_proc</run_depend>
+    <run_depend>ira_laser_tools</run_depend>
+    <run_depend>range_sensor_filters</run_depend>
+    <run_depend>si_utils</run_depend>
+    <run_depend>segway_v3_config</run_depend>
+
+	<export>
+	</export>
+</package>

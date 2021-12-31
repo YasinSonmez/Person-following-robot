@@ -1,0 +1,138 @@
+#!/usr/bin/env python
+
+
+"""
+This script is used to force the machine into balance mode. Balance mode is very
+dangerous if you do not understand the system dynamics, the operational model and
+the potential hazards to avoid when balancing. This can all be learned from the 
+manual. 
+
+To enter balance (220 only), run this script (rosrun segway_ros segway_test_balancing).
+
+The machine will start to beep indicating that it is waiting for the balance entry
+criteria to be met. The criteria are:
+
+1. Balance mode must be unlocked, it is locked by default
+2. The platform must be in standby mode to make the transition to balance mode
+3. The PSE must be initialized, which requires the machine be at less that 35deg pitch
+4. The pitch angle must cross through 0 deg (machine upright)
+5. The pitch rate must be low (ie don't fling the machine back, slowly tilt it back to upright)
+
+Slowly tilt the machine back, the beeping rate will increase as zero pitch is approached. Once zero
+pitch has been crossed the machine will enter balance mode. Immediately let go.
+
+READ THE MANUAL ABOUT HAZARDS AND FULLY UNDERSTAND THE OPERATING PRINCIPLES OF BALANCING BEFORE ATTEMPTING!!!!!!!!
+
+"""
+
+
+"""--------------------------------------------------------------------
+COPYRIGHT 2014 Stanley Innovation Inc.
+
+Software License Agreement:
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation and/or
+other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its contributors
+may be used to endorse or promote products derived from this software without
+specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ \file   segway_test_balancing
+
+ \brief  Tests balance mode with the 220
+
+ \Platform: Linux/ROS Indigo
+--------------------------------------------------------------------"""
+from segway.system_defines import *
+from dynamic_reconfigure.client import Client
+from dynamic_reconfigure.msg import Config
+from segway_msgs.msg import *
+import rospy
+
+class TestBalance(object):
+    def __init__(self):
+    
+        rospy.loginfo("waiting for segway dynamic reconfigure server....")
+        rospy.wait_for_message('/segway/segway_driver/parameter_updates', Config) 
+    
+        rospy.loginfo("Unlocking balance mode")
+        client= Client("/segway",timeout=1.0)
+        changes = dict({"balance_mode_enabled":True})
+        config = client.update_configuration(changes)
+        client.close()
+    
+        
+        
+        self.cfg_cmd = ConfigCmd()
+        self.cfg_pub = rospy.Publisher('/segway/gp_command', ConfigCmd, queue_size=10)
+        
+        
+        self._operational_mode = 0
+        self._state_fb = rospy.Subscriber("/segway/feedback/status", Status, self._update_status)
+        
+        r = rospy.Rate(1)
+        rospy.loginfo("Putting platform in standbymode")
+        while not (3 == self._operational_mode):
+            rospy.loginfo("Making attempt to put platform in standby mode(3) it is in %d"%self._operational_mode)
+            self.cfg_cmd.header.stamp = rospy.get_rostime()
+            self.cfg_cmd.gp_cmd = 'GENERAL_PURPOSE_CMD_SET_OPERATIONAL_MODE'
+            self.cfg_cmd.gp_param = STANDBY_REQUEST
+            self.cfg_pub.publish(self.cfg_cmd)
+            self.cfg_cmd.header.seq+=1
+            r.sleep()
+            
+        r = rospy.Rate(2)
+        rospy.loginfo("Putting platform in balance mode")
+        while not (5 == self._operational_mode):
+            rospy.loginfo("Making attempt to put platform in balance mode(3) it is in %d"%self._operational_mode)
+            rospy.loginfo("Once the platform starts beeping slowly tip it back past vertical to enter balance mode")
+            self.cfg_cmd.header.stamp = rospy.get_rostime()
+            self.cfg_cmd.gp_cmd = 'GENERAL_PURPOSE_CMD_SET_OPERATIONAL_MODE'
+            self.cfg_cmd.gp_param = BALANCE_REQUEST
+            self.cfg_pub.publish(self.cfg_cmd)
+            self.cfg_cmd.header.seq+=1
+            r.sleep()
+            
+       rospy.loginfo("Platform has entered balance mode successfully!!!!")        
+        
+        
+    def _update_status(self,data):
+    
+        self._operational_mode = data.operational_state
+
+
+if __name__=='__main__':
+
+    rospy.init_node('segway_test_balancing')
+    TestBalance()
+    rospy.loginfo('Done')
+    
+
+    
+    
+    
+    
+    
+    
+
+
+

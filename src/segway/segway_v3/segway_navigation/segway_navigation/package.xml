@@ -1,0 +1,18 @@
+<package>
+    <name>segway_navigation</name>
+    <version>0.0.1</version>
+    <description>Navigation metapackage for Segway RMP</description>
+
+    <maintainer email="RMP@stanleyinnovation.com">Stanley Innovation, Inc.</maintainer>
+    <license>BSD</license>
+    <url type="website">http://ros.org/wiki/segway_rmp_v3</url>
+    <author>Patrick Hussey</author>
+
+    <buildtool_depend>catkin</buildtool_depend>
+    <run_depend>segway_assisted_teleop</run_depend>
+    <run_depend>segway_navigation_apps</run_depend>
+  
+  <export>
+    <metapackage/>
+  </export>
+</package>

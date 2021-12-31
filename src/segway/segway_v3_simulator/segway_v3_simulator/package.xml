@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package>
+  <name>segway_v3_simulator</name>
+  <version>1.0.0</version>
+  <description>Metapackage for Segway V3 gazebo simulation</description>
+
+  <maintainer email="dev@stanleyinnovation.com">Patrick Hussey</maintainer>
+
+  <license>BSD</license>
+
+  <url type="website">http://ros.wiki.org/Robots/RMPv3</url>
+  <url type="bugtracker">https://github.com/stanleyinnovation/segway_v3_simulator/issues</url>
+  <url type="repository">https://github.com/stanleyinnovation/segway_v3_simulator</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>segway_gazebo</run_depend>
+  <run_depend>segway_sim_control</run_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+</package>

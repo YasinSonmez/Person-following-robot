@@ -1,0 +1,13 @@
+Header header
+float32 x_vel_target_mps
+float32 y_vel_target_mps
+float32 yaw_rate_target_rps
+float32 vel_limit_mps
+float32 yaw_rate_limit_rps
+float32[] wheel_vel_mps
+float32[] wheel_pos_m
+float32 x_accel_mps2
+float32 y_accel_mps2
+float32 yaw_accel_mps2
+float32 yaw_angle_rad
+float32 odom_yaw_angle_rad

@@ -1,0 +1,23 @@
+<!-- Launch file for Segway platform startup -->
+
+<launch>
+
+	<!-- Segway System Watchdog is necessary for onboard PC -->
+	<node pkg="segway_ros" type="segway_wd" name="segway_wd" respawn="true" if="$(optenv SEGWAY_POWERS_PC_ONBOARD false)"/>
+	        
+    <!-- Segway Base platform ROS Driver -->
+    <node pkg="segway_ros" ns="segway" type="segway_driver" name="segway_driver" respawn="true" output="screen">
+        <param name="platform" value="$(optenv SEGWAY_BASE_PLATFORM RMP_210)" />
+        <param name="use_platform_odometry" value="$(optenv SEGWAY_USE_PLATFORM_ODOMETRY false)" />
+        <param name="ext_imu_src" value="um7_imu" if="$(optenv SEGWAY_HAS_UM7_IMU false)"/>
+        <param name="ext_imu_src" value="3dm_gx3" if="$(optenv SEGWAY_HAS_MICROSTRAIN_3DM_GX3_35 false)"/>
+    </node>
+
+    <!-- Platform specific robot state publisher and parameters -->
+    <include file="$(find segway_description)/launch/description.launch"/>
+    
+    <!-- Platform specific configuration -->
+    <node name="dynamic_reconfigure_load" pkg="dynamic_reconfigure" type="dynparam"
+        args="load /segway/segway_driver $(find segway_bringup)/launch/platform/config/$(optenv SEGWAY_PLATFORM_NAME RMP_210)/segway_params.yaml" />
+    
+</launch>
