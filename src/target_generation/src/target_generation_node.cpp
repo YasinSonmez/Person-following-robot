@@ -99,12 +99,62 @@ void TargetNode::mainLoop()
 			// Stay some distance behind the human and also between the robot and human
 			double delta_x = actor_pose.pose.position.x - odom_in_map_frame.pose.position.x;
 			double delta_y = actor_pose.pose.position.y - odom_in_map_frame.pose.position.y;
-			double delta_r = sqrt(pow(delta_x, 2.0) + pow(delta_y, 2.0));
+			// Set the difference vector angle using the difference vector
+			double diff_angle = std::atan2(delta_y, delta_x);
 
-			target.pose.position.x = actor_pose.pose.position.x -
-									 DISTANCE_TO_FOLLOW_BEHIND * delta_x / delta_r;
-			target.pose.position.y = actor_pose.pose.position.y -
-									 DISTANCE_TO_FOLLOW_BEHIND * delta_y / delta_r;
+			// If the costmap between the human and robot is occupied check the arc
+			// that is 1m behind the human
+			double delta_yaw = 0;
+			int costmap_idx = 0;
+			// translate yaw into a Quaternion
+			tf::Quaternion q;
+
+			for (int i = 0; i < 180; i++)
+			{
+				delta_yaw = PI / 180.0 * i;
+				// Check plus delta_yaw
+				// Normalize between -PI, +PI
+				double normalized_angle = fmod((diff_angle + delta_yaw + PI), (2 * PI)) - PI;
+				target.pose.position.x = actor_pose.pose.position.x -
+										 DISTANCE_TO_FOLLOW_BEHIND * cos(normalized_angle);
+				target.pose.position.y = actor_pose.pose.position.y -
+										 DISTANCE_TO_FOLLOW_BEHIND * sin(normalized_angle);
+
+				costmap_idx = mapToCostmapIdx(target.pose.position.x,
+											  target.pose.position.y,
+											  costmap.info.width,
+											  costmap.info.height,
+											  costmap.info.resolution);
+				if ((int)costmap.data[costmap_idx] == 0)
+				{
+					q.setRPY(0.0, 0.0, diff_angle + delta_yaw);
+					break;
+				}
+
+				// Check minus delta_yaw
+				// Normalize between -PI, +PI
+				normalized_angle = fmod((diff_angle - delta_yaw + PI), (2 * PI)) - PI;
+				target.pose.position.x = actor_pose.pose.position.x -
+										 DISTANCE_TO_FOLLOW_BEHIND * cos(normalized_angle);
+				target.pose.position.y = actor_pose.pose.position.y -
+										 DISTANCE_TO_FOLLOW_BEHIND * sin(normalized_angle);
+
+				costmap_idx = mapToCostmapIdx(target.pose.position.x,
+											  target.pose.position.y,
+											  costmap.info.width,
+											  costmap.info.height,
+											  costmap.info.resolution);
+				if ((int)costmap.data[costmap_idx] == 0)
+				{
+					q.setRPY(0.0, 0.0, diff_angle - delta_yaw);
+					break;
+				}
+			}
+
+			// Convert quaternion to msg
+			geometry_msgs::Quaternion q_msg;
+			tf::quaternionTFToMsg(q, q_msg);
+			target.pose.orientation = q_msg;
 		}
 		else if (FOLLOW_MODE == "behind the human")
 		{
@@ -125,10 +175,12 @@ void TargetNode::mainLoop()
 			{
 				delta_yaw = PI / 180.0 * i;
 				// Check plus delta_yaw
+				// Normalize between -PI, +PI
+				double normalized_angle = fmod((yaw + delta_yaw + PI), (2 * PI)) - PI;
 				target.pose.position.x = actor_pose.pose.position.x -
-										 DISTANCE_TO_FOLLOW_BEHIND * cos(yaw + delta_yaw);
+										 DISTANCE_TO_FOLLOW_BEHIND * cos(normalized_angle);
 				target.pose.position.y = actor_pose.pose.position.y -
-										 DISTANCE_TO_FOLLOW_BEHIND * sin(yaw + delta_yaw);
+										 DISTANCE_TO_FOLLOW_BEHIND * sin(normalized_angle);
 
 				costmap_idx = mapToCostmapIdx(target.pose.position.x,
 											  target.pose.position.y,
@@ -139,10 +191,12 @@ void TargetNode::mainLoop()
 					break;
 
 				// Check minus delta_yaw
+				// Normalize between -PI, +PI
+				normalized_angle = fmod((yaw - delta_yaw + PI), (2 * PI)) - PI;
 				target.pose.position.x = actor_pose.pose.position.x -
-										 DISTANCE_TO_FOLLOW_BEHIND * cos(yaw - delta_yaw);
+										 DISTANCE_TO_FOLLOW_BEHIND * cos(normalized_angle);
 				target.pose.position.y = actor_pose.pose.position.y -
-										 DISTANCE_TO_FOLLOW_BEHIND * sin(yaw - delta_yaw);
+										 DISTANCE_TO_FOLLOW_BEHIND * sin(normalized_angle);
 
 				costmap_idx = mapToCostmapIdx(target.pose.position.x,
 											  target.pose.position.y,
