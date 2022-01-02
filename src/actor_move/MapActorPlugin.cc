@@ -76,6 +76,7 @@ void gazebo::MapActorPlugin::OnRosMsg(const nav_msgs::PathConstPtr &_msg)
 {
   this->actor_path = *_msg;
   path_arrived++;
+  this->velocity = 0.7;
 }
 
 /// \brief ROS helper function that processes messages
@@ -91,7 +92,7 @@ void gazebo::MapActorPlugin::QueueThread()
 /////////////////////////////////////////////////
 void gazebo::MapActorPlugin::Reset()
 {
-  this->velocity = 0.8;
+  this->velocity = 0.1;
   this->lastUpdate = 0;
 
   if (this->sdf && this->sdf->HasElement("target"))
@@ -156,7 +157,17 @@ void gazebo::MapActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   // Time delta
   double dt = (_info.simTime - this->lastUpdate).Double();
 
-  ignition::math::Pose3d pose = this->actor->WorldPose();
+  ignition::math::Pose3d pose;
+
+  // Make sure the actor starts from the origin if the first update
+  if (this->lastUpdate == 0)
+  {
+    pose.Pos().X(0);
+    pose.Pos().Y(0);
+    pose.Pos().Z(1.2138);
+  }
+  else
+    pose = this->actor->WorldPose();
   ignition::math::Vector3d pos = this->target - pose.Pos();
 
   double distance = pos.Length();
@@ -175,8 +186,12 @@ void gazebo::MapActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   ignition::math::Angle yaw = atan2(pos.Y(), pos.X()) + 1.5707;
   yaw.Normalize();
 
-  pose.Pos() += pos * this->velocity * dt;
-  pose.Rot() = ignition::math::Quaterniond(1.5707, 0, yaw.Radian());
+  // If the first iteration don't change the coordinates (to start from 0)
+  if (this->lastUpdate != 0)
+  {
+    pose.Pos() += pos * this->velocity * dt;
+    pose.Rot() = ignition::math::Quaterniond(1.5707, 0, yaw.Radian());
+  }
 
   // Make sure the actor stays within bounds
   pose.Pos().X(std::max(-15.0, std::min(15.0, pose.Pos().X())));
