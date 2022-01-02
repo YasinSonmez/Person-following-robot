@@ -14,6 +14,7 @@ TebLocalPlannerROS:
   exact_arc_length: False
   feasibility_check_no_poses: 5
   publish_feedback: False
+  force_reinit_new_goal_dist: 0.1
 
   # Robot
   max_vel_x: 1.0 # m/s
@@ -21,7 +22,7 @@ TebLocalPlannerROS:
   max_vel_y: 0.0
   max_vel_theta: 3.14 # rad/s
   acc_lim_x: 0.5 # m/s^2
-  acc_lim_theta: 3.14 # rad/s^2
+  acc_lim_theta: 1.57 # rad/s^2
   min_turning_radius: 0.0 # diff-drive robot (can turn on place!)
 
   footprint_model:
