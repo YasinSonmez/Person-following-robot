@@ -14,7 +14,7 @@ using namespace std;
 
 #define PI 3.14159265
 // Distance that is substracted from the position of the actor
-#define DISTANCE_TO_FOLLOW_BEHIND 1.0
+#define DISTANCE_TO_FOLLOW_BEHIND 1.5
 #define FOLLOW_MODE "check costmap behind the human"
 // #define FOLLOW_MODE "between the robot and human"
 // #define FOLLOW_MODE "behind the human"

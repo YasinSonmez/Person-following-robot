@@ -866,7 +866,6 @@
         <animation_factor>5.1</animation_factor>
       </plugin>
 
-      <!-- Enable collisions-->
       <plugin name="attach_model0" filename="libAttachModelPlugin.so">
         <link>
           <link_name>actor0_pose</link_name>
@@ -876,7 +875,7 @@
         </link>
       </plugin> 
     </actor>
-
+    <!--
     <model name="collision_model_actor1">
       <pose>1 3 1.21 0 0 0</pose>
       <static>true</static>
@@ -909,7 +908,6 @@
         <animation_factor>5.1</animation_factor>
       </plugin>
 
-      <!-- Enable collisions-->
       <plugin name="attach_model1" filename="libAttachModelPlugin.so">
         <link>
           <link_name>actor1_pose</link_name>
@@ -952,7 +950,6 @@
         <animation_factor>5.1</animation_factor>
       </plugin>
 
-      <!-- Enable collisions-->
       <plugin name="attach_model2" filename="libAttachModelPlugin.so">
         <link>
           <link_name>actor2_pose</link_name>
@@ -962,7 +959,7 @@
         </link>
       </plugin> 
     </actor>
-    <!--
+    
     <model name="collision_model_actor3">
       <pose>1 3 1.21 0 0 0</pose>
       <static>true</static>

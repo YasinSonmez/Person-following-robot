@@ -59,11 +59,11 @@ void TargetNode::costmapCallback(const nav_msgs::OccupancyGrid::ConstPtr &costma
 
 void TargetNode::modelStatesCallback(const gazebo_msgs::ModelStates::ConstPtr &model_states)
 {
-	int actor1_index = getIndex(model_states->name, "actor1");
+	int actor0_index = getIndex(model_states->name, "actor0");
 
 	// Set the yaw angle from substracting consequent positions
-	yaw = std::atan2((model_states->pose[actor1_index].position.y - actor_pose.pose.position.y),
-					 (model_states->pose[actor1_index].position.x - actor_pose.pose.position.x));
+	yaw = std::atan2((model_states->pose[actor0_index].position.y - actor_pose.pose.position.y),
+					 (model_states->pose[actor0_index].position.x - actor_pose.pose.position.x));
 
 	// translate yaw into a Quaternion
 	tf::Quaternion q;
@@ -77,7 +77,7 @@ void TargetNode::modelStatesCallback(const gazebo_msgs::ModelStates::ConstPtr &m
 	actor_pose.pose.orientation = q_msg;
 
 	// Set the position
-	actor_pose.pose.position = model_states->pose[actor1_index].position;
+	actor_pose.pose.position = model_states->pose[actor0_index].position;
 
 	actor_pose.header.stamp = ros::Time::now();
 	actor_pose.header.frame_id = "map";
