@@ -178,7 +178,7 @@
       </link>
       <!-- joints -->
       <joint name="${prefix}turret_base_joint" type="fixed">
-         <insert_block name="origin" />
+         <xacro:insert_block name="origin" />
          <parent link="${parent}" />
          <child link="${prefix}turret_base_link"/>
          <dynamics damping="0.0" friction="0.0"/>
