@@ -40,7 +40,7 @@ import socket
 import sys
 import rospy
 import os
-from utils import m32
+from .utils import m32
 
 class SegwayWatchdog:
     def __init__(self):

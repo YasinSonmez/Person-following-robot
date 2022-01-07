@@ -37,9 +37,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import struct
 import socket
 import math
-import crc16
+from .crc16 import *
 import array
-from system_defines import *
+from .system_defines import *
 
 """
 slew limit funtion to limit the maximum rate of change
@@ -87,7 +87,7 @@ def generate_cmd_bytes(cmd):
     """
     Generate the CRC for the command bytes
     """
-    crc16.compute_buffer_crc(cmd_bytes)
+    compute_buffer_crc(cmd_bytes)
 
     return cmd_bytes
     
@@ -100,7 +100,7 @@ def validate_response(rsp):
     data = array.array('I',data.tostring())
     final_data = data
     rsp = array.array('B',data.tostring())
-    if (crc16.buffer_crc_is_valid(rsp)) and (len(rsp) > 0):
+    if (buffer_crc_is_valid(rsp)) and (len(rsp) > 0):
         return True,final_data[:len(final_data)-1]
        
     """
