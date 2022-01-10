@@ -386,7 +386,7 @@
     portrait image by replacing the texture files. Remember that the 
     texture file name needs to be the same.
     -->
-     <!-- WALL -->
+     <!-- WALL 
 	<model name='PortraitA_01'>
         <static>true</static>    
         <include>
@@ -464,8 +464,9 @@
         </include>
         <pose frame=''>-6.193025 -1.590208 0.3 0 -0 0.004290</pose>
 	</model>
+  -->
 
-    <!-- DESK -->
+    <!-- DESK
 	<model name='DeskPortraitA_01'>
         <static>true</static>    
         <include>
@@ -537,6 +538,7 @@
         </include>
 	<pose frame=''>2.486270 -5.102525 -0.012660 -0.336621 0.000000 3.046798</pose>
 	</model>
+   -->
     <!-- Wall & Desk Portraits END -->
 
 	<model name='Rangehood_01_001'>
@@ -596,7 +598,7 @@
         </include>
         <pose frame=''>-8.704151 1.00058 0.011 0 -0 0</pose>
 	</model>
-	<model name='TV_01_001'>
+	<!-- <model name='TV_01_001'>
         <static>true</static>    
         <include>
             <uri>model://aws_robomaker_residential_TV_01</uri>
@@ -609,7 +611,7 @@
             <uri>model://aws_robomaker_residential_TV_02</uri>
         </include>
         <pose frame=''>-6.197322 -1.388739 0.676282 0 -0 -1.561744</pose>
-	</model>	
+	</model>	-->
 	<model name='TVCabinet_01_001'>
         <static>true</static>    
         <include>
