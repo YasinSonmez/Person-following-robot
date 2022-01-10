@@ -20,10 +20,10 @@
          the state of the robot, with the state vector being defined as X position, Y position, Z position,
          roll, pitch, yaw, their respective velocites, and linear acceleration. Units for all measurements are assumed
          to conform to the SI standard as specified in REP-103. -->
-  <!--  <include file="$(find segway_bringup)/launch/localization/segway_odometry.launch" >
+    <include file="$(find segway_bringup)/launch/localization/segway_odometry.launch" >
         <arg name="use_platform_odometry" value="false"/>
         <remap from="segway/odometry/local_filtered" to="/odom" />
-    </include>-->
+    </include>
     
     <include file="$(find segway_bringup)/launch/teleop/segway_teleop.launch" >
         <arg name="sim" value="true"/>
