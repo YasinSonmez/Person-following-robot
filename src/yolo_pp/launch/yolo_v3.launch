@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  
+  <!-- Use YOLOv3 -->
+  <arg name="network_param_file"         default="$(find darknet_ros)/config/yolov2-tiny.yaml"/>
+
+
+  <!-- Include main launch file -->
+  <include file="$(find darknet_ros)/launch/darknet_ros.launch">
+    <arg name="network_param_file"    value="$(arg network_param_file)"/>
+    <arg name="image" value="camera_ir/camera/color/image_raw" />
+  </include>
+
+  <node pkg="yolo_pp" type="yolo_pp_node" name="yolo_pp" output="screen"/>
+  <!-- <remap from="zed/depth/image_raw" to="camera_ir/camera/depth/image_raw" /> 
+
+<node pkg="robot" type="tf_publisher" name="tf_publisher" />-->
+
+</launch>
