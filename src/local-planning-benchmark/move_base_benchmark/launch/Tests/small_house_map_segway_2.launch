@@ -27,7 +27,7 @@
   <!-- Filename -->
   <arg name="log_filename" default="$(find move_base_benchmark)/launch/log.txt" />
   <arg name="map_filename" default="$(find move_base_benchmark)/maps/small_house/map.yaml" />
-  <arg name="world_filename" default="$(find gazebo_world)/world/small_house_map.world" />
+  <arg name="world_filename" default="$(find gazebo_world)/world/Tests/small_house_map_2.world" />
   <arg name="global_frame" value="map" />
 
   <!--  ************** Navigation *************** -->
@@ -111,8 +111,8 @@
   <!--  **************** Visualisation ****************  -->
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find move_base_benchmark)/launch/rviz_navigation.rviz"/>
 
-  <!--  ****** Actor Position Publisher *****  -->
+  <!--  ****** Actor Position Publisher *****  
   <node name="actor_pos_publish_node" pkg="actor_pos_publish" type="actor_pos_publish_node" respawn="true" 
-  launch-prefix="bash -c 'sleep 17; $0 $@' "/>
+  launch-prefix="bash -c 'sleep 17; $0 $@' "/>-->
   
 </launch>
