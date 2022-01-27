@@ -3,8 +3,18 @@ using namespace std;
 TargetNode::TargetNode()
 {
 	// Subscribers
-	modelStates_sub = nh.subscribe("/gazebo/model_states", 1, &TargetNode::modelStatesCallback, this);
-	odom_sub = nh.subscribe("/RosAria/odom", 1, &TargetNode::odomCallback, this);
+	if (HUMAN_TRACKING_MODE == "laser")
+		peopleTracked_sub = nh.subscribe("/people_tracked", 1, &TargetNode::peopleTrackedCallback, this);
+	else if (HUMAN_TRACKING_MODE == "camera")
+	{
+		human_sub = nh.subscribe("human_pose", 1, &TargetNode::humanCallback, this);
+		// Subscribe also to model states to calculate total distances
+		modelStatesForDistance_sub = nh.subscribe("/gazebo/model_states", 1, &TargetNode::modelStatesForDistanceCallback, this);
+	}
+
+	else
+		modelStates_sub = nh.subscribe("/gazebo/model_states", 1, &TargetNode::modelStatesCallback, this);
+	odom_sub = nh.subscribe("base_pose_ground_truth", 1, &TargetNode::odomCallback, this);
 	costmap_sub = nh.subscribe("/move_base_benchmark/global_costmap/costmap",
 							   1, &TargetNode::costmapCallback, this);
 
@@ -44,12 +54,13 @@ void TargetNode::odomCallback(const nav_msgs::Odometry::ConstPtr &odom_msg)
 	odom_in_map_frame.header = odom.header;
 	odom_in_map_frame.pose = odom.pose.pose;
 
-	tf2_ros::TransformListener tf2_listener(tf_buffer);
+	/*tf2_ros::TransformListener tf2_listener(tf_buffer);
 	if (tf_buffer.canTransform("map", "odom", ros::Time(0), ros::Duration(2.0)))
 	{
 		odom_to_map = tf_buffer.lookupTransform("map", "odom", ros::Time(0), ros::Duration(1.0));
 		tf2::doTransform(odom_in_map_frame, odom_in_map_frame, odom_to_map);
 	}
+	*/
 }
 
 void TargetNode::costmapCallback(const nav_msgs::OccupancyGrid::ConstPtr &costmap_msg)
@@ -85,6 +96,47 @@ void TargetNode::modelStatesCallback(const gazebo_msgs::ModelStates::ConstPtr &m
 	actor_message_arrived = true;
 }
 
+void TargetNode::modelStatesForDistanceCallback(const gazebo_msgs::ModelStates::ConstPtr &model_states)
+{
+	int actor0_index = getIndex(model_states->name, "actor0");
+
+	// Set the position
+	actor_pose_ground_truth.pose.position = model_states->pose[actor0_index].position;
+}
+
+void TargetNode::peopleTrackedCallback(const leg_tracker::PersonArray::ConstPtr &person_array)
+{
+	// Set the position and orientation quaternion
+	if (person_array->people.size() != 0)
+		actor_pose.pose = person_array->people[0].pose;
+
+	// Get the yaw angle from quaternion
+	tf::Pose pose;
+	tf::poseMsgToTF(actor_pose.pose, pose);
+	yaw = tf::getYaw(pose.getRotation());
+
+	actor_pose.header.stamp = ros::Time::now();
+	actor_pose.header.frame_id = "map";
+	followed_person_pub.publish(actor_pose);
+	actor_message_arrived = true;
+}
+
+void TargetNode::humanCallback(const geometry_msgs::PoseStamped::ConstPtr &human_pos)
+{
+	// Set the position and orientation quaternion
+	actor_pose.pose = human_pos->pose;
+
+	// Get the yaw angle from quaternion
+	tf::Pose pose;
+	tf::poseMsgToTF(actor_pose.pose, pose);
+	yaw = tf::getYaw(pose.getRotation());
+
+	actor_pose.header.stamp = ros::Time::now();
+	actor_pose.header.frame_id = "map";
+	followed_person_pub.publish(actor_pose);
+	actor_message_arrived = true;
+}
+
 /****************************************MAIN LOOP***********************************************
 ************************************************************************************************/
 void TargetNode::mainLoop()
@@ -92,8 +144,46 @@ void TargetNode::mainLoop()
 	// Check if the target position message is arrived
 	if (actor_message_arrived)
 	{
-		target.pose.orientation = actor_pose.pose.orientation;
+		// Calculate average distance between the human and the robot
+		double delta_x_ground_truth = actor_pose_ground_truth.pose.position.x - odom_in_map_frame.pose.position.x;
+		double delta_y_ground_truth = actor_pose_ground_truth.pose.position.y - odom_in_map_frame.pose.position.y;
+		total_distance += sqrt(pow(delta_y_ground_truth, 2) + pow(delta_x_ground_truth, 2));
+		average_distance = total_distance / avg_count;
+		cout << "average_distance: " << average_distance << endl;
+		avg_count++;
 
+		// Calculate traveled distance by the robot
+		if (!first_time)
+		{
+			previous_x_robot = odom_in_map_frame.pose.position.x;
+			previous_y_robot = odom_in_map_frame.pose.position.y;
+
+			previous_x_human = actor_pose_ground_truth.pose.position.x;
+			previous_y_human = actor_pose_ground_truth.pose.position.y;
+			first_time = ros::Time::now().toSec();
+		}
+		else
+		{
+			double delta_x_robot = odom_in_map_frame.pose.position.x - previous_x_robot;
+			double delta_y_robot = odom_in_map_frame.pose.position.y - previous_y_robot;
+			total_distance_robot += sqrt(pow(delta_y_robot, 2) + pow(delta_x_robot, 2));
+			cout << "total_distance_robot: " << total_distance_robot << endl;
+
+			double delta_x_human = actor_pose_ground_truth.pose.position.x - previous_x_human;
+			double delta_y_human = actor_pose_ground_truth.pose.position.y - previous_y_human;
+			total_distance_human += sqrt(pow(delta_y_human, 2) + pow(delta_x_human, 2));
+			cout << "total_distance_human: " << total_distance_human << endl;
+			cout << "time: " << ros::Time::now().toSec() - first_time << endl
+				 << endl;
+
+			previous_x_robot = odom_in_map_frame.pose.position.x;
+			previous_y_robot = odom_in_map_frame.pose.position.y;
+
+			previous_x_human = actor_pose_ground_truth.pose.position.x;
+			previous_y_human = actor_pose_ground_truth.pose.position.y;
+		}
+		// Set the orientation
+		target.pose.orientation = actor_pose.pose.orientation;
 		if (FOLLOW_MODE == "between the robot and human")
 		{
 			// Stay some distance behind the human and also between the robot and human
