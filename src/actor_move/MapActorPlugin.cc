@@ -76,7 +76,7 @@ void gazebo::MapActorPlugin::OnRosMsg(const nav_msgs::PathConstPtr &_msg)
 {
   this->actor_path = *_msg;
   path_arrived++;
-  this->velocity = 0.7;
+  this->velocity = 0.4;
 }
 
 /// \brief ROS helper function that processes messages
