@@ -5,6 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Odometry1/Covariance1/Position1
+        - /Pose3
       Splitter Ratio: 0.6050959825515747
     Tree Height: 677
   - Class: rviz/Selection
@@ -25,7 +26,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: LaserScan
+    SyncSource: Zed Depth
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -172,70 +173,160 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
+        ara_parca_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        aux_battery_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        base_chassis_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        battery0:
+        bsa_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        front_caster_plate_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        center_hubcap:
+        front_caster_swivel_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        center_wheel:
+        front_caster_wheel_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        chassis:
+        hinge_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        hokuyo_utm30lx_base_link:
+        inertial_collision_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        hokuyo_utm30lx_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        left_hub:
+        kabuk_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        left_wheel:
+        kafa_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_hub:
+        left_spacer_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_wheel:
+        left_wheel_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        sonar:
+        mcu_0_battery_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        swivel:
+        mcu_1_battery_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        top:
+        payload_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rear_caster_plate_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rear_caster_swivel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rear_caster_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_spacer_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        servo_horn_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        servo_pan_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        servo_tilt_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        servos_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        side_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        top_plate_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        turret_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ui_box_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        velodyne:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        velodyne_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -509,6 +600,7 @@ Visualization Manager:
         Marker: true
         Odometry: true
         Path: true
+        Polygon: true
         Pose: true
         RobotModel: true
         Value: true
@@ -538,7 +630,7 @@ Visualization Manager:
       Axes Length: 1
       Axes Radius: 0.10000000149011612
       Class: rviz/Pose
-      Color: 255; 25; 0
+      Color: 32; 74; 135
       Enabled: true
       Head Length: 0.30000001192092896
       Head Radius: 0.10000000149011612
@@ -548,6 +640,15 @@ Visualization Manager:
       Shaft Radius: 0.05000000074505806
       Shape: Arrow
       Topic: /human_pose
+      Unreliable: false
+      Value: true
+    - Alpha: 1
+      Class: rviz/Polygon
+      Color: 25; 255; 0
+      Enabled: true
+      Name: Polygon
+      Queue Size: 10
+      Topic: /move_base_benchmark/global_costmap/footprint
       Unreliable: false
       Value: true
   Enabled: true
@@ -578,7 +679,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 17.006553649902344
+      Distance: 15.609251022338867
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -586,9 +687,9 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: -0.5816278457641602
-        Y: -0.41536378860473633
-        Z: 0.6913508772850037
+        X: -0.5696486234664917
+        Y: -3.2567367553710938
+        Z: 0.6813666224479675
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
@@ -596,7 +697,7 @@ Visualization Manager:
       Near Clip Distance: 0.009999999776482582
       Pitch: 1.5697963237762451
       Target Frame: base_link
-      Yaw: 3.132072687149048
+      Yaw: 3.1470770835876465
     Saved: ~
 Window Geometry:
   Displays:
