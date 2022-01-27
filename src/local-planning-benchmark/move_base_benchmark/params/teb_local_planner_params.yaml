@@ -26,8 +26,8 @@ TebLocalPlannerROS:
   min_turning_radius: 0.0 # diff-drive robot (can turn on place!)
 
   footprint_model:
-    type: "point"
-
+    type: "circular"
+    radius: 0.4
   # GoalTolerance
   xy_goal_tolerance: 0.3
   yaw_goal_tolerance: 0.4
@@ -35,8 +35,8 @@ TebLocalPlannerROS:
   complete_global_plan: True
 
   # Obstacles
-  min_obstacle_dist: 0.4 # This value must also include our robot radius, since footprint_model is set to "point".
-  inflation_dist: 0.6
+  min_obstacle_dist: 0.05
+  inflation_dist: 0.45
   include_costmap_obstacles: True
   costmap_obstacles_behind_robot_dist: 1.5
   obstacle_poses_affected: 15
