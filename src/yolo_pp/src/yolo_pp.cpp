@@ -205,6 +205,8 @@ public:
           }
         }
       }
+
+      // Remove the points far away than average 3 times
       for (int i = 0; i < 3; i++)
       {
         if (!dists.empty())
@@ -230,6 +232,7 @@ public:
         TransformPose(targetPositionX, targetPositionY);
         cout << "After: " << targetPositionX << ",   " << targetPositionY << endl;
 
+        // If the difference is more than threshold, update angle
         double y_diff = targetPositionY - prev_targetPositionY;
         double x_diff = targetPositionX - prev_targetPositionX;
         double total_distance = abs(y_diff) + abs(x_diff);
@@ -240,23 +243,13 @@ public:
           prev_targetPositionX = targetPositionX;
           prev_targetPositionY = targetPositionY;
         }
-        // measurement << targetPositionX, targetPositionY, 0, 0;
-        //(void)kalman_filter_.predict(ros::Time::now().toSec());
-        // auto output = kalman_filter_.update(measurement);
-        //         ROS_INFO("Depth: %f , targetX: %f, targetY: %f", targetDistance,
-        //                  targetPositionX, targetPositionY);
+
         geometry_msgs::PoseStamped poseMsg;
         poseMsg.header.frame_id = "map";
         poseMsg.header.stamp = ros::Time::now();
         poseMsg.pose.position.x = targetPositionX;
         poseMsg.pose.position.y = targetPositionY;
-        // poseMsg.pose.position.x = output(0);
-        // poseMsg.pose.position.y = output(1);
-        // poseMsg.pose.orientation = tf::createQuaternionMsgFromYaw(atan2(output(3), output(2)));
         poseMsg.pose.orientation = tf::createQuaternionMsgFromYaw(yaw);
-        // cout << "X: " << output(0) << " Y: " << output(1) << endl;
-        // cout << "VX: " << output(2) << " VY: " << output(3) << endl
-        //      << endl;
 
         target_position_pub.publish(poseMsg);
         prev_found = true;
@@ -264,18 +257,14 @@ public:
     }
     else
     {
+      // If no bounding box is present, previous results are published
       prev_found = false;
-      auto output = kalman_filter_.predict(ros::Time::now().toSec());
       geometry_msgs::PoseStamped poseMsg;
       poseMsg.header.frame_id = "map";
       poseMsg.header.stamp = ros::Time::now();
       poseMsg.pose.position.x = targetPositionX;
       poseMsg.pose.position.y = targetPositionY;
-
-      // auto yaw = atan2(output(3), output(2));
       poseMsg.pose.orientation = tf::createQuaternionMsgFromYaw(yaw);
-      // std::cout << "X: " << output(0) << " Y: " << output(1) << std::endl;
-      // std::cout << "VX: " << output(2) << " VY: " << output(3) << std::endl;
 
       target_position_pub.publish(poseMsg);
     }
@@ -284,17 +273,13 @@ public:
   {
     if (!prev_found)
     {
-      auto output = kalman_filter_.predict(ros::Time::now().toSec());
+      // If no bounding box is present, previous results are published
       geometry_msgs::PoseStamped poseMsg;
       poseMsg.header.frame_id = "map";
       poseMsg.header.stamp = ros::Time::now();
       poseMsg.pose.position.x = targetPositionX;
       poseMsg.pose.position.y = targetPositionY;
-
-      // auto yaw = atan2(output(3), output(2));
       poseMsg.pose.orientation = tf::createQuaternionMsgFromYaw(yaw);
-      // cout << "X: " << output(0) << " Y: " << output(1) << endl;
-      // cout << "VX: " << output(2) << " VY: " << output(3) << endl;
 
       target_position_pub.publish(poseMsg);
     }
@@ -316,7 +301,7 @@ public:
         ROS_WARN_STREAM("Waiting for transform between "
                         << "zed_camera_center"
                         << " - "
-                        << "BASE_LINK"
+                        << "map"
                         << " . It is not initialized yet!");
       }
     }

@@ -18,48 +18,27 @@ using namespace std;
 #define REFLECT_AXIS_Y 1
 #define E_SS_LIM 0.15
 
+// Publisher
 ros::Publisher panRefPub;
-ros::Publisher tiltRefPub;
-float prev_rx = 0, current_rx = 0, current_ry = 0, offset = 0, angle_added = 0,
-      prev_angle_added = 0, yaw = 0, target_difference = 0, angle_increment = 0.06;
-// bool is_pan_moving = false, is_tilt_moving = false;
-int is_human_detected = 0, dont_increase_count = 0, lost_count = 0;
+// Variables
+float prev_rx = 0, current_rx = 0, angle_added = 0,
+      prev_angle_added = 0, yaw = 0, angle_increment = 0.06;
 nav_msgs::Odometry odom;
 
-float mod(float a, float N) { return a - N * floor(a / N); } // return in range [0, N)
+// Counters
+int is_human_detected = 0, dont_increase_count = 0, lost_count = 0;
 
-float calcRef(float target, int maxRes, float r_lim, bool is_reflected)
-{
-    float center = maxRes / 2;
-    float diff = target - center;
-    float new_r = (diff + center) / (maxRes)*r_lim - r_lim / 2;
-    if (is_reflected)
-    {
-        new_r = -new_r;
-    }
-    return new_r;
-}
+float mod(float a, float N) { return a - N * floor(a / N); } // Mod function to return in range [0, N)
 
 void targetXCb(const std_msgs::Int16::ConstPtr &targetX)
 {
+    // When human is detected start counter from 200
     is_human_detected = 200;
 }
-/*
-bool detect_movement(float r, float y, const string &name)
-{
-    float err = r - y;
-    if (abs(err) > E_SS_LIM)
-    {
-        // ROS_INFO("%s is moving. Err: %f", name.c_str(), err);
-        return true;
-    }
-    return false;
-}
-*/
 
 void panStateCb(const control_msgs::JointControllerState::ConstPtr &panState)
 {
-    // is_pan_moving = detect_movement(current_rx, panState->process_value, "pan");
+    // Decrease the count, if human isn't seen for a while count becomes 0
     if (is_human_detected)
         is_human_detected--;
 }
@@ -76,11 +55,13 @@ void odomCb(const nav_msgs::Odometry::ConstPtr &odom_msg)
 
 void humanPoseCb(const geometry_msgs::PoseStamped::ConstPtr &human_pose)
 {
+    // calculate the angle to focus on human
     double focus_angle = atan2((human_pose->pose.position.y - odom.pose.pose.position.y),
                                (human_pose->pose.position.x - odom.pose.pose.position.x));
     std_msgs::Float64 panRef;
     if (is_human_detected)
     {
+        // add yaw to focus_angle to account for the body's motion
         current_rx = mod((yaw + focus_angle + PI), (2 * PI)) - PI;
 
         panRef.data = current_rx;
@@ -91,7 +72,7 @@ void humanPoseCb(const geometry_msgs::PoseStamped::ConstPtr &human_pose)
     }
     else
     {
-        // If turning 2*pi to catch up, dont increase angle for some time
+        // If turning 2*pi to catch up, don't increase angle for some time
         if (abs(prev_rx - current_rx) > 0.1)
             dont_increase_count = 40;
         // Increase the angle with small increments to find the human
@@ -100,6 +81,7 @@ void humanPoseCb(const geometry_msgs::PoseStamped::ConstPtr &human_pose)
 
         prev_rx = current_rx;
         current_rx = mod((yaw + focus_angle + angle_added + PI), (2 * PI)) - PI;
+
         // If the head moves 2*pi degrees count as lost
         if (prev_angle_added < 0 && angle_added > 0)
         {
