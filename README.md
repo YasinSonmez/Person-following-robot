@@ -47,6 +47,7 @@ You can also select goals for the robot using the ```2D Nav Goal``` tool in ```R
 ## 2. Setup
 ### 2.1 Darknet ROS
 Follow the installation instructions [**here**](https://github.com/leggedrobotics/darknet_ros) to install Darknet ROS. Install it inside the workspace.
+After the installation, there are some updates needed in the code for synchronization of bounding box and depth messages. Copy and overwrite src/darknet_ros_updated_files/YoloObjectDetector.cpp to src/darknet_ros/darknet_ros/src and src/darknet_ros_updated_files/YoloObjectDetector.hpp to src/darknet_ros/darknet_ros/include/darknet_ros.
 ### 2.2 Gazebo-Map-Actor-Plugin
 Follow the steps from [Gazebo-Map-Actor-Plugin](https://github.com/YasinSonmez/Gazebo-Map-Actor-Plugin) to compile the gazebo plugin for the actors and see how to use the actors and actor position publisher node. You don't need to download the code again, plugin codes are already in this repository, all you need to do is to build the plugin following the steps there.
 ### 2.3 Actor Collisions Plugin
@@ -64,9 +65,11 @@ After that, a library named "libActorCollisionsPlugin.so" will be generated in t
 ```
 source src/segway/segway_v3/segway_v3_config/std_configs/segway_config_RMP_220.bash
 ```
-2. Launch any launch file from local-planning-benchmark/move_base_benchmark/launch directory:
+2. Launch any launch file from local-planning-benchmark/move_base_benchmark/launch directory (1: random human, 2: large range, 3: small range):
 ```
 roslaunch move_base_benchmark move_base_benchmark_small_house_map_segway.launch
+roslaunch move_base_benchmark small_house_map_segway_1.launch
+roslaunch move_base_benchmark small_house_map_segway_2.launch
 ```
 3. Run the actor pos publisher node (if not run inside the .launch file): 
 ```
@@ -85,7 +88,7 @@ rosrun widowx_turret_controller pt_cmd
 rosrun target_generation target_generation_node
 ```
 ## TODO
-- [ ] Synchronization of bounding box and depth messages(need tuning)
+- [X] Synchronization of bounding box and depth messages(need tuning)
 - [ ] Localization using any method (currently odometry is taken from gazebo)
 - [ ] Memorization of human positions when lost from view
 - [ ] Collision objects for humans
