@@ -18,7 +18,7 @@ https://user-images.githubusercontent.com/37510173/151413131-d7237742-6661-4421-
 The project has been tested on Ubuntu 16.04 (ROS Kinetic) and 18.04 (ROS Melodic). We highly recommend using Ubuntu 18.04 since Ubuntu 16.04 will no longer be supported after April 2021. In the following we will take ROS Melodic version as the example. The navigation simulation is performed by the powerful ROS navigation stack, wherein two local planners of DWA and TEB are tested. Therefore, please install these packages first:
 
 ```
-sudo apt install ros-melodic-navigation ros-melodic-teb-local-planner ros-melodic-arbotix-python
+sudo apt install ros-melodic-navigation ros-melodic-teb-local-planner ros-melodic-arbotix-python ros-melodic-velodyne-description ros-melodic-pcl-ros ros-melodic-ros-control ros-melodic-ros-controllers
 ```
 The distance to the closest obstacle is computed by performing bicubic interpolation on top of the Euclidean distance grid (EDG). EDG is constructed by an efficient distance transform algorithm implemented in OpenCV, and bicubic interpolation is implemented in [Google's Ceres solver](http://ceres-solver.org/). Therefore, please install Ceres solver following the official [installation tutorial](http://ceres-solver.org/installation.html). 
 
